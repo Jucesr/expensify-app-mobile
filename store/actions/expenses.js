@@ -20,7 +20,6 @@ export const addExpense = (expenseData = {}) => {
          amount,
          createdAt,
       };
-      console.log(uid);
       return database
          .ref(`users/${uid}/expenses`)
          .push(expense)
