@@ -7,6 +7,9 @@ export default {
       ProfileScreen: {
          title: "Perfil",
          signOut: "Cerrar sesión",
+         expenseTotalMessage: "Total de gastos",
+         expenseCountMessage: "Número de gastos",
+         inputText: "Idioma",
       },
       ExpenseListScreen: {
          title: "Gastos",
@@ -21,6 +24,13 @@ export default {
       },
       ExpenseFilterScreen: {
          title: "Filtros",
+      },
+      ReportsScreen: {
+         title: "Reportes",
+      },
+      ReportMonthScreen: {
+         title: "Reportes por mes",
+         chartTitle: "Gastos totales",
       },
       categories: {
          food: "Alimentación",
@@ -39,6 +49,19 @@ export default {
          debit_card: "Tarjeta de débito",
          vouchers: "Vales",
          other: "Otro",
+      },
+      sort_by: {
+         date: "Fecha",
+         amount: "Monto",
+      },
+   },
+   en: {
+      ProfileScreen: {
+         title: "Profile",
+         signOut: "Sign out",
+         expenseTotalMessage: "Expense's total",
+         expenseCountMessage: "Expense's count",
+         inputText: "Language",
       },
    },
 };

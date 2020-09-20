@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
    View,
    StyleSheet,
    Text,
    Button,
    ScrollView,
+   FlatList,
    TouchableOpacity,
 } from "react-native";
 import moment from "moment";
@@ -12,6 +13,9 @@ import moment from "moment";
 import Colors from "../constants/colors";
 import labels from "../constants/labels";
 import { formatValue } from "../utils/index";
+
+import { useDispatch } from "react-redux";
+import { setExpenses } from "../store/actions/expenses";
 
 const OFFSET_VALUE = 5;
 
@@ -21,6 +25,21 @@ const ExpensesList = (props) => {
    const [offset, setOffset] = useState(OFFSET_VALUE);
 
    const expensesToRender = expenses.slice(0, offset);
+
+   const [isRefreshing, setIsRefreshing] = useState(false);
+
+   const dispatch = useDispatch();
+
+   const loadExpenses = useCallback(async () => {
+      setIsRefreshing(true);
+      try {
+         await dispatch(setExpenses());
+      } catch (err) {
+         console.log(err);
+         //   setError(err.message);
+      }
+      setIsRefreshing(false);
+   }, [dispatch]);
 
    return (
       <View style={styles.table}>
@@ -32,11 +51,15 @@ const ExpensesList = (props) => {
                {labels[locale].ExpenseListScreen.amountColTitle}
             </Text>
          </View>
-         <ScrollView style={styles.tableBody}>
-            {expensesToRender.map((expense, index) => (
+         <FlatList
+            onRefresh={loadExpenses}
+            refreshing={isRefreshing}
+            style={styles.tableBody}
+            data={expensesToRender}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item: expense }) => (
                <TouchableOpacity
                   activeOpacity={0.6}
-                  key={index}
                   onPress={() => {
                      props.onItemPress(expense);
                   }}
@@ -69,19 +92,21 @@ const ExpensesList = (props) => {
                      </View>
                   </View>
                </TouchableOpacity>
-            ))}
-            {offset < expenses.length && (
-               <View style={styles.button}>
-                  <Button
-                     color={Colors.blue}
-                     title={labels[locale].ExpenseListScreen.loadMore}
-                     onPress={() => {
-                        setOffset(offset + OFFSET_VALUE);
-                     }}
-                  />
-               </View>
             )}
-         </ScrollView>
+            ListFooterComponent={() =>
+               offset < expenses.length && (
+                  <View style={styles.button}>
+                     <Button
+                        color={Colors.blue}
+                        title={labels[locale].ExpenseListScreen.loadMore}
+                        onPress={() => {
+                           setOffset(offset + OFFSET_VALUE);
+                        }}
+                     />
+                  </View>
+               )
+            }
+         />
       </View>
    );
 };
@@ -90,7 +115,6 @@ const styles = StyleSheet.create({
    table: {
       // flex: 1,
       width: "95%",
-      marginTop: 10,
    },
    tableHeader: {
       borderWidth: 1,
@@ -110,7 +134,7 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderColor: Colors.grayBorder,
       borderTopWidth: 0,
-      height: "80%",
+      height: "75%", // TODO: FIX THIS. This is the height
    },
    tableBodyItem: {
       padding: 10,
