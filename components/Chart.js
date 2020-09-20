@@ -1,32 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
+
+import { replaceAll, formatValue } from "../utils";
+
+import labels from "../constants/labels";
+import Colors from "../constants/colors";
+
 import { LineChart } from "react-native-chart-kit";
 
-const data = [14858.91, 17435.59, 55574.81, 4716.39, 26380.01, 18664.31];
-
-const line = {
-   // labels: ['Ene 20', 'Feb 20', 'Mar 20', 'Abr 20', 'May 20', 'Jun 20', 'Jul 20', 'Ago 20', 'Sep 20', 'Oct 20', 'Nov 20', 'Dic 20'],
-   labels: ["Ene 20", "Feb 20", "Mar 20", "Abr 20", "May 20", "Jun 20"],
-   datasets: [
-      {
-         // data: [14858.91, 17435.59, 55574.81, 4716.39, 26380.01, 18664.31, 9999.37, 8530.73, 2272.43, 2272.43, 2272.43, 2272.43],
-         data: data,
-         strokeWidth: 1, // optional
-      },
-   ],
-};
-
-const MonthReportScreen = (props) => {
-   const highestValue = data.reduce((acum, item) => {
-      if (item > acum) return item;
-      else return acum;
-   }, 0);
-
-   const highestValueIndex = data.findIndex((item) => item === highestValue);
-
+const Chart = ({ line, data, title }) => {
    return (
-      <View style={styles}>
-         {" "}
+      <View style={styles.chart}>
+         <View style={styles.chartTitleContainer}>
+            <Text style={styles.chartTitle}>{title}</Text>
+         </View>
          <LineChart
             data={line}
             width={Dimensions.get("window").width} // from react-native
@@ -55,7 +42,7 @@ const MonthReportScreen = (props) => {
                         position: "absolute",
                         left: x,
                         top: y,
-                        fontSize: 12,
+                        fontSize: 8,
                      }}
                      key={index}
                   >
@@ -64,9 +51,9 @@ const MonthReportScreen = (props) => {
                );
             }}
             style={{
-               marginVertical: 8,
+               // marginVertical: 8,
                borderRadius: 16,
-               paddingRight: 64,
+               paddingRight: 20,
                // paddingLeft: 64
             }}
          />
@@ -74,6 +61,22 @@ const MonthReportScreen = (props) => {
    );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+   chart: {
+      paddingBottom: 20,
 
-export default MonthReportScreen;
+      backgroundColor: "white",
+   },
+   chartTitleContainer: {
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 10,
+   },
+   chartTitle: {
+      color: Colors.blue,
+      fontWeight: "bold",
+      fontSize: 18,
+   },
+});
+
+export default Chart;

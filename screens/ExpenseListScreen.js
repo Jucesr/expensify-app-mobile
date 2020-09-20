@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
    View,
    StyleSheet,
@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { Feather as Icon } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import moment from "moment";
+
 import { useSelector, useDispatch } from "react-redux";
 
 import labels from "../constants/labels";
@@ -16,17 +19,50 @@ import HeaderButton from "../components/HeaderButton";
 import ExpenseList from "../components/ExpensesList";
 import Colors from "../constants/colors";
 
+import { formatValue } from "../utils/index";
+
 const ExpenseListScreen = (props) => {
    const [textFilter, setTextFilter] = useState("");
-   let expenses = useSelector((state) => state.expenses).sort((a, b) =>
-      a.createdAt < b.createdAt ? 1 : -1
-   );
+   let expenses = useSelector((state) => {
+      const filters = state.filters;
+
+      const expenses = state.expenses.filter((expense) => {
+         let isValid = true;
+         if (
+            moment(expense.createdAt).isBefore(filters.startDate) ||
+            moment(expense.createdAt).isAfter(filters.endDate)
+         ) {
+            isValid = false;
+         }
+
+         if (!filters.categories[expense.category]) {
+            isValid = false;
+         }
+         if (!filters.paymentMethods[expense.payment_method]) {
+            isValid = false;
+         }
+
+         return isValid;
+      });
+
+      const sortProp = filters.sortBy === "date" ? "createdAt" : "amount";
+      return expenses.sort((a, b) => (a[sortProp] < b[sortProp] ? 1 : -1));
+   });
 
    if (textFilter.length > 0) {
       expenses = expenses.filter((exp) =>
          exp.description.toLowerCase().includes(textFilter.toLowerCase())
       );
    }
+
+   const expenseTotal = useMemo(() => {
+      return expenses.reduce((sum, expense) => sum + expense.amount, 0);
+   }, [textFilter, expenses]);
+
+   const changeTextFilterHandler = (value) => {
+      setTextFilter(value);
+   };
+
    return (
       <View style={styles.screen}>
          <View style={styles.inputContainer}>
@@ -42,7 +78,7 @@ const ExpenseListScreen = (props) => {
                   placeholder={
                      labels.es.ExpenseListScreen.searchInputPlaceholder
                   }
-                  onChangeText={(value) => setTextFilter(value)}
+                  onChangeText={changeTextFilterHandler}
                   value={textFilter}
                   underlineColorAndroid="transparent"
                />
@@ -61,6 +97,17 @@ const ExpenseListScreen = (props) => {
                />
             </TouchableOpacity>
          </View>
+         {expenses.length > 0 && (
+            <View style={styles.messageContainer}>
+               <Text style={styles.message}>
+                  Viendo <Text style={styles.bold}>{expenses.length}</Text>{" "}
+                  gastos, un total de{" "}
+                  <Text style={styles.bold}>
+                     {formatValue("currency", expenseTotal / 100)}
+                  </Text>
+               </Text>
+            </View>
+         )}
          <ExpenseList
             expenses={expenses}
             locale={"es"}
@@ -80,13 +127,25 @@ const styles = StyleSheet.create({
       backgroundColor: "white",
       alignItems: "center",
    },
+   messageContainer: {
+      paddingBottom: 10,
+      // borderWidth: 1,
+      width: "95%",
+   },
+   message: {
+      fontSize: 16,
+      textAlign: "left",
+   },
+   bold: {
+      fontWeight: "bold",
+   },
    inputContainer: {
       // borderWidth: 1,
       flexDirection: "row",
-      justifyContent: "center",
+      justifyContent: "space-between",
       alignItems: "center",
-      marginTop: 10,
-      width: "90%",
+      marginVertical: 10,
+      width: "95%",
    },
    searchSection: {
       // flex: 1,
@@ -97,28 +156,26 @@ const styles = StyleSheet.create({
       borderColor: "#D2D2D2",
       borderWidth: 1,
       borderRadius: 10,
-      width: "80%",
+      width: "85%",
    },
    searchIcon: {
-      padding: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 5,
    },
    input: {
       flex: 1,
-      paddingTop: 10,
+      paddingTop: 5,
       paddingRight: 10,
-      paddingBottom: 10,
+      paddingBottom: 5,
       paddingLeft: 0,
       // backgroundColor: "#fff",
       color: "#424242",
    },
    filterIcon: {
       // borderWidth: 1,
-      padding: 10,
+      paddingHorizontal: 10,
       marginLeft: 10,
-   },
-   button: {
-      marginTop: 10,
-      width: "95%",
+      // width: "20%",
    },
 });
 
