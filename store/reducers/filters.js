@@ -1,67 +1,40 @@
-import moment from 'moment'
+import moment from "moment";
+import labels from "../../constants/labels";
+
+const categoryInitialState = Object.keys(labels.es.categories).reduce(
+   (acum, key) => {
+      return {
+         ...acum,
+         [key]: true,
+      };
+   },
+   {}
+);
+
+const paymentMethodInitialState = Object.keys(labels.es.payment_methods).reduce(
+   (acum, key) => {
+      return {
+         ...acum,
+         [key]: true,
+      };
+   },
+   {}
+);
 
 const filterReducerDefaultState = {
-  text: '',
-  sortBy: 'date',
-  startDate: moment().startOf('month'),
-  endDate: moment().endOf('month'),
-  category: 'disabled',
-  payment_method: 'disabled',
+   sortBy: "date",
+   startDate: moment().startOf("month"),
+   endDate: moment().endOf("month"),
+   categories: categoryInitialState,
+   paymentMethods: paymentMethodInitialState,
 };
 
 export default (state = filterReducerDefaultState, action) => {
-  switch (action.type) {
+   switch (action.type) {
+      case "SET_FILTERS":
+         return action.filters;
 
-    case 'SET_TEXT_FILTER':
-      return {
-        ...state,
-        text: action.text
-      }
-    break;
-
-    case 'SORT_BY_DATE':
-      return {
-        ...state,
-        sortBy: 'date'
-      }
-    break;
-
-    case 'SORT_BY_AMOUNT':
-      return {
-        ...state,
-        sortBy: 'amount'
-      }
-    break;
-
-    case 'SET_START_DATE':
-      return {
-        ...state,
-        startDate: action.startDate
-      }
-    break;
-
-    case 'SET_END_DATE':
-      return {
-        ...state,
-        endDate: action.endDate
-      }
-    break;
-    
-    case 'SET_CATEGORY':
-      return {
-        ...state,
-        category: action.category
-      }
-    break;
-    
-    case 'SET_PAYMENT_METHOD':
-      return {
-        ...state,
-        payment_method: action.payment_method
-      }
-    break;
-
-    default:
-      return state;
-  }
+      default:
+         return state;
+   }
 };
