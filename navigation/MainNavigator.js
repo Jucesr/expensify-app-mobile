@@ -16,6 +16,12 @@ import ExpenseFilterScreen, {
 import ProfileScreen, {
    screenOptions as ProfileScreenOptions,
 } from "../screens/ProfileScreen";
+import ReportScreen, {
+   screenOptions as ReportsScreenOptions,
+} from "../screens/ReportsScreen";
+import ReportMonthScreen, {
+   screenOptions as ReportMonthScreenOptions,
+} from "../screens/ReportMonthScreen";
 
 import Colors from "../constants/colors";
 
@@ -23,6 +29,7 @@ import { FontAwesome } from "@expo/vector-icons";
 
 const ExpenseStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
+const ReportStack = createStackNavigator();
 const AppNavigator = createBottomTabNavigator();
 
 const isOS = Platform.OS === "ios";
@@ -56,17 +63,26 @@ const ExpenseNavigator = () => {
    );
 };
 
-const ReportScreen = () => {
+const ReportNavigator = () => {
    return (
-      <View>
-         <Text>Texto</Text>
-      </View>
+      <ReportStack.Navigator screenOptions={defaultNavOptions}>
+         <ReportStack.Screen
+            name="ReportsScreen"
+            component={ReportScreen}
+            options={ReportsScreenOptions}
+         />
+         <ReportStack.Screen
+            name="ReportMonthScreen"
+            component={ReportMonthScreen}
+            options={ReportMonthScreenOptions}
+         />
+      </ReportStack.Navigator>
    );
 };
 const ProfileNavigator = () => {
    return (
       <ProfileStack.Navigator screenOptions={defaultNavOptions}>
-         <ExpenseStack.Screen
+         <ProfileStack.Screen
             name="ProfileScreen"
             component={ProfileScreen}
             options={ProfileScreenOptions}
@@ -109,7 +125,7 @@ const MainNavigator = (props) => {
             ></AppNavigator.Screen>
             <AppNavigator.Screen
                name="Reports"
-               component={ReportScreen}
+               component={ReportNavigator}
                options={{
                   title: "REPORTES",
                   tabBarIcon: (tabInfo) => {

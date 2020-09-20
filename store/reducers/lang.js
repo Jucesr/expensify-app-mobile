@@ -1,23 +1,17 @@
-
 const defaultState = {
-  locale: '',
-  dictionary: {}
-}
-
-export default (state = defaultState, action) => {
-  switch (action.type) {
-    case 'SET_LANGUAGE':
-      return{
-        ...state,
-        locale: action.locale,
-        dictionary: action.dictionary
-      }
-    break;
-
-    default:
-      return state
-
-  }
+   locale: "es",
 };
 
-// lang.loginButton['es']
+export default (state = defaultState, action) => {
+   switch (action.type) {
+      case "SET_LANGUAGE":
+         return {
+            ...state,
+            locale: action.locale,
+         };
+         break;
+
+      default:
+         return state;
+   }
+};

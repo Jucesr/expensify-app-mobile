@@ -1,25 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
    View,
-   Text,
    StyleSheet,
-   TextInput,
    Button,
-   Picker,
    ScrollView,
-   DatePickerAndroid,
-   TouchableOpacity,
    ActivityIndicator,
 } from "react-native";
 import { Formik } from "formik";
 import moment from "moment";
 import { useDispatch } from "react-redux";
-// import { HeaderButtons, Item } from "react-navigation-header-buttons";
-// import HeaderButton from "../../components/UI/HeaderButton";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
+import InputField from "../components/InputField";
+import HeaderButton from "../components/HeaderButton";
 import { addExpense, editExpense } from "../store/actions/expenses";
-
-import Colors from "../constants/colors";
 import labels from "../constants/labels";
 
 const paymentMethodOptions = Object.keys(labels.es.payment_methods).map(
@@ -46,12 +40,50 @@ const ExpenseFormScreen = (props) => {
    const [isLoading, setIsLoading] = useState(false);
    const expense = props.route.params && props.route.params.expense;
 
+   const formRef = useRef();
+
+   useEffect(() => {
+      props.navigation.setOptions({
+         headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButton}>
+               <Item
+                  title="Save"
+                  iconName="md-save"
+                  onPress={async () => {
+                     if (formRef.current) {
+                        const values = formRef.current.values;
+                        setIsLoading(true);
+                        const obj = {
+                           ...values,
+                           createdAt: values.createdAt.valueOf(),
+                           amount: parseFloat(values.amount) * 100,
+                        };
+                        if (expense) {
+                           // Edit mode
+
+                           await dispatch(editExpense(expense.id, obj));
+                        } else {
+                           // Add mode
+
+                           await dispatch(addExpense(obj));
+                        }
+                        setIsLoading(false);
+                        props.navigation.goBack();
+                     }
+                  }}
+               />
+            </HeaderButtons>
+         ),
+      });
+   }, [formRef]);
+
    if (isLoading) {
       return <ActivityIndicator size="large" color="#0000ff" />;
    }
    return (
       <ScrollView contentContainerStyle={styles.screen}>
          <Formik
+            innerRef={formRef}
             initialValues={{
                payment_method: expense ? expense.payment_method : "cash",
                category: expense ? expense.category : "food",
@@ -134,9 +166,9 @@ const ExpenseFormScreen = (props) => {
                      onBlur={handleBlur("note")}
                      type="textarea"
                   />
-                  <View style={styles.button}>
+                  {/* <View style={styles.button}>
                      <Button onPress={handleSubmit} title="Aceptar" />
-                  </View>
+                  </View> */}
                </View>
             )}
          </Formik>
@@ -144,139 +176,8 @@ const ExpenseFormScreen = (props) => {
    );
 };
 
-const InputField = ({ label, textInputStyle, type = "text", ...rest }) => {
-   const renderInput = (type) => {
-      switch (type) {
-         case "textarea":
-            return (
-               <TextInput
-                  style={{ ...styles.textInput, ...textInputStyle }}
-                  multiline={true}
-                  {...rest}
-               />
-            );
-
-         case "select":
-            return (
-               <View style={styles.pickerContainer}>
-                  <Picker
-                     textStyle={{ fontSize: 8 }}
-                     selectedValue={rest.value}
-                     style={styles.picker}
-                     onValueChange={(itemValue, itemIndex) =>
-                        rest.onChangeText(itemValue)
-                     }
-                  >
-                     {rest.options.map((option) => (
-                        <Picker.Item
-                           key={option.value}
-                           label={option.label}
-                           value={option.value}
-                        />
-                     ))}
-                  </Picker>
-               </View>
-            );
-
-         case "date":
-            return (
-               <TouchableOpacity
-                  activeOpacity={0.6}
-                  onPress={async () => {
-                     try {
-                        const {
-                           action,
-                           year,
-                           month,
-                           day,
-                        } = await DatePickerAndroid.open({
-                           // Use `new Date()` for current date.
-                           // May 25 2020. Month 0 is January.
-                           date: new Date(),
-                        });
-                        if (action !== DatePickerAndroid.dismissedAction) {
-                           // Selected year, month (0-11), day
-                           rest.onChangeText(new Date(year, month, day));
-                        }
-                     } catch ({ code, message }) {
-                        console.warn("Cannot open date picker", message);
-                     }
-                  }}
-               >
-                  <Text
-                     style={{ ...styles.textInput, ...styles.dateTextInput }}
-                  >
-                     {rest.value
-                        ? moment(rest.value).format("DD MMMM YYYY")
-                        : "Selecciona una fecha"}
-                  </Text>
-               </TouchableOpacity>
-            );
-
-         case "currency":
-            return (
-               <TextInput
-                  keyboardType="decimal-pad"
-                  style={{ ...styles.textInput, ...styles.currencyInput }}
-                  {...rest}
-               />
-            );
-
-         default:
-            return (
-               <TextInput
-                  style={{ ...styles.textInput, ...textInputStyle }}
-                  {...rest}
-               />
-            );
-      }
-   };
-   return (
-      <View style={styles.field}>
-         <Text style={styles.label}>{label}</Text>
-         {renderInput(type)}
-      </View>
-   );
-};
-
 const styles = StyleSheet.create({
    screen: { paddingBottom: 20 },
-   field: {
-      paddingHorizontal: 30,
-      marginTop: 20,
-   },
-   label: {
-      fontFamily: "montserrat-bold",
-      color: Colors.blue,
-      paddingBottom: 5,
-   },
-   textInput: {
-      fontFamily: "roboto",
-      backgroundColor: Colors.gray,
-      borderColor: "#D2D2D2",
-      borderWidth: 1,
-      borderRadius: 10,
-      paddingVertical: 4,
-      paddingHorizontal: 15,
-   },
-   pickerContainer: {
-      backgroundColor: Colors.gray,
-      borderColor: "#D2D2D2",
-      borderWidth: 1,
-      borderRadius: 10,
-      paddingLeft: 0,
-      paddingVertical: 0,
-      margin: 0,
-   },
-   picker: {
-      margin: 0,
-      fontFamily: "roboto",
-      left: -10,
-      transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }],
-   },
-   dateTextInput: {
-      paddingVertical: 10,
-   },
    button: {
       marginTop: 20,
       paddingHorizontal: 30,

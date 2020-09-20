@@ -12,13 +12,19 @@ import "moment/locale/es";
 //  Reducers
 import expensesReducer from "./store/reducers/expenses";
 import authReducer from "./store/reducers/auth";
+import filtersReducer from "./store/reducers/filters";
+import langReducer from "./store/reducers/lang";
+
 import { login, logout } from "./store/actions/auth";
 import { setExpenses } from "./store/actions/expenses";
+
 import LoginScreen from "./screens/LoginScreen";
 
 const rootReducer = combineReducers({
    expenses: expensesReducer,
    auth: authReducer,
+   filters: filtersReducer,
+   lang: langReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
