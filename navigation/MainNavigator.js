@@ -22,6 +22,12 @@ import ReportScreen, {
 import ReportMonthScreen, {
    screenOptions as ReportMonthScreenOptions,
 } from "../screens/ReportMonthScreen";
+import ReportCategoryScreen, {
+   screenOptions as ReportCategoryScreenOptions,
+} from "../screens/ReportCategoryScreen";
+import ReportPaymentMethodScreen, {
+   screenOptions as ReportPaymentMethodScreenOptions,
+} from "../screens/ReportPaymentMethodScreen";
 
 import Colors from "../constants/colors";
 
@@ -75,6 +81,16 @@ const ReportNavigator = () => {
             name="ReportMonthScreen"
             component={ReportMonthScreen}
             options={ReportMonthScreenOptions}
+         />
+         <ReportStack.Screen
+            name="ReportCategoryScreen"
+            component={ReportCategoryScreen}
+            options={ReportCategoryScreenOptions}
+         />
+         <ReportStack.Screen
+            name="ReportPaymentMethodScreen"
+            component={ReportPaymentMethodScreen}
+            options={ReportPaymentMethodScreenOptions}
          />
       </ReportStack.Navigator>
    );

@@ -35,7 +35,8 @@ const Chart = ({ line, data, title }) => {
                },
             }}
             bezier
-            renderDotContent={({ x, y, index }) => {
+            renderDotContent={(dot) => {
+               const { x, y, index } = dot;
                return (
                   <Text
                      style={{
@@ -46,7 +47,7 @@ const Chart = ({ line, data, title }) => {
                      }}
                      key={index}
                   >
-                     {formatValue("currency", data[index])}
+                     {formatValue("currency", line.datasets[0].data[index])}
                   </Text>
                );
             }}
