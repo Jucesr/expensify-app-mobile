@@ -41,6 +41,9 @@ const ExpensesList = (props) => {
       setIsRefreshing(false);
    }, [dispatch]);
 
+   const tableHeaderHeight = 70;
+   const tableBodyHeight = props.height - tableHeaderHeight;
+
    return (
       <View style={styles.table}>
          <View style={styles.tableHeader}>
@@ -54,7 +57,10 @@ const ExpensesList = (props) => {
          <FlatList
             onRefresh={loadExpenses}
             refreshing={isRefreshing}
-            style={styles.tableBody}
+            style={{
+               ...styles.tableBody,
+               height: tableBodyHeight,
+            }}
             data={expensesToRender}
             keyExtractor={(item) => item.id}
             renderItem={({ item: expense }) => (
@@ -123,6 +129,7 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.gray,
       justifyContent: "space-between",
       padding: 10,
+      height: 50,
    },
    tableColumnText: {
       color: Colors.primary,
@@ -134,7 +141,7 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderColor: Colors.grayBorder,
       borderTopWidth: 0,
-      height: "75%", // TODO: FIX THIS. This is the height
+      // height: "100%", // TODO: FIX THIS. This is the height
    },
    tableBodyItem: {
       padding: 10,

@@ -5,11 +5,11 @@ import {
    TextInput,
    Text,
    TouchableOpacity,
-   Button,
+   Dimensions,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { Feather as Icon } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
+import { useHeaderHeight } from "@react-navigation/stack";
 import moment from "moment";
 
 import { setExpenses } from "../store/actions/expenses";
@@ -19,15 +19,26 @@ import labels from "../constants/labels";
 import HeaderButton from "../components/HeaderButton";
 import ExpenseList from "../components/ExpensesList";
 import Colors from "../constants/colors";
+import navigation from "../constants/navigation";
 
 import { formatValue } from "../utils/index";
 
+const HEIGTH = {
+   searchBar: {
+      box: 43,
+      margin: 10,
+   },
+   messageContainer: {
+      box: 30,
+   },
+};
+
 const ExpenseListScreen = (props) => {
+   const headerHeight = useHeaderHeight();
    const [textFilter, setTextFilter] = useState("");
    const dispatch = useDispatch();
 
    useEffect(() => {
-      console.log("Fetching expenses");
       dispatch(setExpenses());
    }, []);
    let expenses = useSelector((state) => {
@@ -76,6 +87,16 @@ const ExpenseListScreen = (props) => {
       setTextFilter(value);
    };
 
+   // Calculate List Height
+
+   const tableListHeight =
+      Dimensions.get("window").height -
+      headerHeight -
+      HEIGTH.searchBar.box -
+      HEIGTH.searchBar.margin * 2 -
+      HEIGTH.messageContainer.box -
+      navigation.BOTTOM_TAB_HEIGHT;
+
    return (
       <View style={styles.screen}>
          <View style={styles.inputContainer}>
@@ -122,6 +143,7 @@ const ExpenseListScreen = (props) => {
             </View>
          )}
          <ExpenseList
+            height={tableListHeight}
             expenses={expenses}
             locale={"es"}
             onItemPress={(expense) => {
@@ -141,8 +163,7 @@ const styles = StyleSheet.create({
       alignItems: "center",
    },
    messageContainer: {
-      paddingBottom: 10,
-      // borderWidth: 1,
+      height: HEIGTH.messageContainer.box,
       width: "95%",
    },
    message: {
@@ -153,11 +174,11 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
    },
    inputContainer: {
-      // borderWidth: 1,
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      marginVertical: 10,
+      marginVertical: HEIGTH.searchBar.margin,
+      height: HEIGTH.searchBar.box,
       width: "95%",
    },
    searchSection: {
