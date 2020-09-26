@@ -1,3 +1,11 @@
+### V1.0.0
+
+Sept 26, 2020
+
+-  [NEW]
+   -  First release
+   -  Empty state for expense list
+
 ### V0.1.1
 
 Sept 26, 2020

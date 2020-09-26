@@ -1,21 +1,16 @@
 import React, { useMemo } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
-import { FontAwesome, AntDesign } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { PieChart } from "react-native-chart-kit";
 import { formatValue } from "../utils/index";
 
-import Colors from "../constants/colors";
+import EmptyState from "../components/EmpyState";
 
 const CustomPieChart = ({ data, accessor, absolute, noDataMessage }) => {
    // Order by asscesor value
 
    if (data.length === 0) {
-      return (
-         <View style={styles.emptyState}>
-            <Text style={styles.emptyStateText}>{noDataMessage}</Text>
-            <AntDesign name="piechart" size={100} color={Colors.primary} />
-         </View>
-      );
+      return <EmptyState type="AntDesign" text={noDataMessage} />;
    }
 
    const sortedData = useMemo(() => {
@@ -75,19 +70,6 @@ const CustomPieChart = ({ data, accessor, absolute, noDataMessage }) => {
 };
 
 const styles = StyleSheet.create({
-   emptyState: {
-      height: 220,
-      justifyContent: "center",
-      alignItems: "center",
-      margin: 10,
-      borderRadius: 100,
-      backgroundColor: Colors.darkGray,
-   },
-   emptyStateText: {
-      marginVertical: 10,
-      fontWeight: "bold",
-      fontSize: 16,
-   },
    legend: {
       marginHorizontal: 10,
    },
