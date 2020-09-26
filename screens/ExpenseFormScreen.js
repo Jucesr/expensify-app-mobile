@@ -2,18 +2,22 @@ import React, { useState, useEffect, useRef } from "react";
 import {
    View,
    StyleSheet,
-   Button,
+   Alert,
    ScrollView,
    ActivityIndicator,
 } from "react-native";
 import { Formik } from "formik";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import InputField from "../components/InputField";
 import HeaderButton from "../components/HeaderButton";
-import { addExpense, editExpense } from "../store/actions/expenses";
+import {
+   addExpense,
+   editExpense,
+   removeExpense,
+} from "../store/actions/expenses";
 import labels from "../constants/labels";
 
 const paymentMethodOptions = Object.keys(labels.es.payment_methods).map(
@@ -36,14 +40,18 @@ const categoryOptions = Object.keys(labels.es.categories).map((key) => {
 
 const ExpenseFormScreen = (props) => {
    const dispatch = useDispatch();
+   const locale = useSelector((state) => state.lang.locale);
 
    const [isLoading, setIsLoading] = useState(false);
    const expense = props.route.params && props.route.params.expense;
 
    const formRef = useRef();
 
+   const dictonary = labels[locale].ExpenseFormScreen;
+
    useEffect(() => {
       props.navigation.setOptions({
+         headerTitle: expense ? dictonary.editTitle : dictonary.addTitle,
          headerRight: () => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
                <Item
@@ -72,10 +80,39 @@ const ExpenseFormScreen = (props) => {
                      }
                   }}
                />
+               {expense && (
+                  <Item
+                     title="Delete"
+                     iconName="md-trash"
+                     onPress={() => {
+                        Alert.alert(
+                           dictonary.confirmTitle,
+                           dictonary.confirmMessage,
+                           [
+                              {
+                                 text: "Cancel",
+                                 style: "cancel",
+                              },
+                              {
+                                 text: "OK",
+                                 onPress: async () => {
+                                    // Delete expense
+                                    setIsLoading(true);
+                                    await dispatch(removeExpense(expense.id));
+                                    setIsLoading(false);
+                                    props.navigation.goBack();
+                                 },
+                              },
+                           ],
+                           { cancelable: false }
+                        );
+                     }}
+                  ></Item>
+               )}
             </HeaderButtons>
          ),
       });
-   }, [formRef]);
+   }, [formRef, locale]);
 
    if (isLoading) {
       return <ActivityIndicator size="large" color="#0000ff" />;
