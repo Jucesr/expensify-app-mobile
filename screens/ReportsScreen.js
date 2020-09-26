@@ -24,11 +24,17 @@ const ReportsScreen = (props) => {
             iconType="materialComunity"
             icon="food"
             title="Reportes por categoria"
+            onPress={() => {
+               props.navigation.navigate("ReportCategoryScreen");
+            }}
          />
          <ReportCard
             iconType="material"
             icon="payment"
             title="Reportes por método de pago"
+            onPress={() => {
+               props.navigation.navigate("ReportPaymentMethodScreen");
+            }}
          />
       </View>
    );

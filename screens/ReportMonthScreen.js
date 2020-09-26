@@ -124,37 +124,61 @@ const ReportMonthScreen = (props) => {
       expenses,
       today,
    ]);
-   const newData = dataObj.map((d) => (d.total ? d.total : 0));
-   const foodData = foodDataObj.map((d) => (d.total ? d.total : 0));
-   const billsData = billsDataObj.map((d) => (d.total ? d.total : 0));
+   const houseDataObj = useMemo(dataFunction(filterByCategory("housing")), [
+      expenses,
+      today,
+   ]);
+   const clothingDataObj = useMemo(dataFunction(filterByCategory("clothing")), [
+      expenses,
+      today,
+   ]);
+   const healthDataObj = useMemo(dataFunction(filterByCategory("health")), [
+      expenses,
+      today,
+   ]);
+   const leisureDataObj = useMemo(dataFunction(filterByCategory("leisure")), [
+      expenses,
+      today,
+   ]);
+   const tranportDataObj = useMemo(
+      dataFunction(filterByCategory("transport")),
+      [expenses, today]
+   );
+   const travelDataObj = useMemo(dataFunction(filterByCategory("travel")), [
+      expenses,
+      today,
+   ]);
+   const otherDataObj = useMemo(dataFunction(filterByCategory("other")), [
+      expenses,
+      today,
+   ]);
 
-   const line = {
-      labels: sixMonthAgoLabels,
-      datasets: [
-         {
-            data: newData,
-            strokeWidth: 1, // optional
-         },
-      ],
-   };
-   const line2 = {
-      labels: sixMonthAgoLabels,
-      datasets: [
-         {
-            data: foodData,
-            strokeWidth: 1, // optional
-         },
-      ],
-   };
-   const line3 = {
-      labels: sixMonthAgoLabels,
-      datasets: [
-         {
-            data: billsData,
-            strokeWidth: 1, // optional
-         },
-      ],
-   };
+   const getLine = useCallback(
+      (data) => ({
+         labels: sixMonthAgoLabels,
+         datasets: [
+            {
+               data: data,
+               strokeWidth: 1, // optional
+            },
+         ],
+      }),
+      [sixMonthAgoLabels]
+   );
+
+   const getTotal = useCallback((d) => (d.total ? d.total : 0));
+
+   const newData = dataObj.map(getTotal);
+   const foodData = foodDataObj.map(getTotal);
+   const billsData = billsDataObj.map(getTotal);
+   const houseData = houseDataObj.map(getTotal);
+   const clothingData = clothingDataObj.map(getTotal);
+   const healthData = healthDataObj.map(getTotal);
+
+   const leisureData = leisureDataObj.map(getTotal);
+   const transportData = tranportDataObj.map(getTotal);
+   const travelData = travelDataObj.map(getTotal);
+   const otherData = otherDataObj.map(getTotal);
 
    const headerHeight = useHeaderHeight();
 
@@ -190,18 +214,40 @@ const ReportMonthScreen = (props) => {
          >
             <Chart
                title={labels.es.ReportMonthScreen.chartTitle}
-               line={line}
-               data={newData}
+               line={getLine(newData)}
             />
-            <Chart
-               title={labels.es.categories.food}
-               line={line2}
-               data={foodData}
-            />
+            <Chart title={labels.es.categories.food} line={getLine(foodData)} />
             <Chart
                title={labels.es.categories.bills}
-               line={line3}
-               data={billsData}
+               line={getLine(billsData)}
+            />
+            <Chart
+               title={labels.es.categories.housing}
+               line={getLine(houseData)}
+            />
+            <Chart
+               title={labels.es.categories.clothing}
+               line={getLine(clothingData)}
+            />
+            <Chart
+               title={labels.es.categories.health}
+               line={getLine(healthData)}
+            />
+            <Chart
+               title={labels.es.categories.leisure}
+               line={getLine(leisureData)}
+            />
+            <Chart
+               title={labels.es.categories.transport}
+               line={getLine(transportData)}
+            />
+            <Chart
+               title={labels.es.categories.travel}
+               line={getLine(travelData)}
+            />
+            <Chart
+               title={labels.es.categories.other}
+               line={getLine(otherData)}
             />
          </ScrollView>
       </View>

@@ -21,6 +21,8 @@ export default {
       ExpenseFormScreen: {
          addTitle: "Agregar Gasto",
          editTitle: "Editar Gasto",
+         confirmTitle: "¿Estás seguro?",
+         confirmMessage: "Se borrará el gasto",
       },
       ExpenseFilterScreen: {
          title: "Filtros",
@@ -31,6 +33,14 @@ export default {
       ReportMonthScreen: {
          title: "Reportes por mes",
          chartTitle: "Gastos totales",
+      },
+      ReportCategoryScreen: {
+         title: "Reportes por categoria",
+         noDataMessage: "No hay gastos en este rango",
+      },
+      ReportPaymentMethodScreen: {
+         title: "Reportes por método de pago",
+         noDataMessage: "No hay gastos en este rango",
       },
       categories: {
          food: "Alimentación",

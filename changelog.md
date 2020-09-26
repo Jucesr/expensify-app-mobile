@@ -1,4 +1,14 @@
-### V0.2
+### V0.1.0
+
+Sept 25, 2020
+
+-  [NEW]
+   -  Reports Screen
+      -  Reports by category
+      -  Reports by payment method
+   -  Remove expense functionality
+
+### V0.0.2
 
 Sept 20, 2020
 
@@ -10,7 +20,7 @@ Sept 20, 2020
 -  [Fix]
    -  Change from ScrollView to FlatList on ExpenseList component
 
-### V0.1
+### V0.0.1
 
 Sept 16, 2020
 
