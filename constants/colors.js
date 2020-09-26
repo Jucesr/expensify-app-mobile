@@ -6,4 +6,22 @@ export default {
    borderColor: "#E5E5E5",
    blue: "#3FA3D5",
    red: "#FD3851",
+   categories: {
+      food: "#ff3333",
+      bills: "#ffff34",
+      housing: "#31ff34",
+      clothing: "#31ffff",
+      health: "#3333ff",
+      leisure: "#ff33ff",
+      transport: "#ff0000",
+      travel: "#00ff01",
+      other: "#0000ff",
+   },
+   payment_methods: {
+      cash: "#ff3333",
+      credit_card: "#ffff34",
+      debit_card: "#31ff34",
+      vouchers: "#31ffff",
+      other: "#3333ff",
+   },
 };
