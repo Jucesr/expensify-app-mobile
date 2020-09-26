@@ -41,6 +41,7 @@ const categoryOptions = Object.keys(labels.es.categories).map((key) => {
 const ExpenseFormScreen = (props) => {
    const dispatch = useDispatch();
    const locale = useSelector((state) => state.lang.locale);
+   console.log(locale);
 
    const [isLoading, setIsLoading] = useState(false);
    const expense = props.route.params && props.route.params.expense;

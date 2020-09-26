@@ -2,7 +2,7 @@ export default {
    es: {
       LoginScreen: {
          button: "Iniciar sesión con Google",
-         slogan: "Llego el momento de controlar tus gastos",
+         slogan: "Llegó el momento de controlar tus gastos",
       },
       ProfileScreen: {
          title: "Perfil",

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
-import MainNavigator from "./navigation/MainNavigator";
+import AppNavigator from "./navigation/AppNavigator";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import ReduxThunk from "redux-thunk";
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
-import { firebase } from "./firebase/firebase";
+
+import * as Localization from "expo-localization";
 
 import "moment/locale/es";
 //  Reducers
@@ -15,10 +15,8 @@ import authReducer from "./store/reducers/auth";
 import filtersReducer from "./store/reducers/filters";
 import langReducer from "./store/reducers/lang";
 
-import { login, logout } from "./store/actions/auth";
-import { setExpenses } from "./store/actions/expenses";
-
-import LoginScreen from "./screens/LoginScreen";
+// Actions
+import { setLanguage } from "./store/actions/lang";
 
 const rootReducer = combineReducers({
    expenses: expensesReducer,
@@ -28,6 +26,8 @@ const rootReducer = combineReducers({
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
+
+// store.dispatch(setLanguage(Localization.locale));
 
 const fetchFonts = () => {
    return Font.loadAsync({
@@ -42,23 +42,6 @@ const fetchFonts = () => {
 
 export default function App() {
    const [dataLoaded, setDataLoaded] = useState(false);
-   const [isSignIn, setIsSignIn] = useState(false);
-   firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-         store
-            .dispatch(login(user))
-            .then(() => {
-               return store.dispatch(setExpenses());
-            })
-            .then(() => {
-               setIsSignIn(true);
-            });
-      } else {
-         //   renderApp();
-         store.dispatch(logout());
-         setIsSignIn(false);
-      }
-   });
 
    if (!dataLoaded) {
       return (
@@ -70,17 +53,9 @@ export default function App() {
       );
    }
 
-   if (!isSignIn) {
-      return (
-         <Provider store={store}>
-            <LoginScreen />
-         </Provider>
-      );
-   }
-
    return (
       <Provider store={store}>
-         <MainNavigator />
+         <AppNavigator />
       </Provider>
    );
 }

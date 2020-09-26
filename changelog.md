@@ -1,3 +1,10 @@
+### V0.1.1
+
+Sept 26, 2020
+
+-  [FIX]
+   -  Login screen functionality
+
 ### V0.1.0
 
 Sept 25, 2020
