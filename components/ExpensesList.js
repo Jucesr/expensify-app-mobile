@@ -4,7 +4,6 @@ import {
    StyleSheet,
    Text,
    Button,
-   ScrollView,
    FlatList,
    TouchableOpacity,
 } from "react-native";
@@ -16,6 +15,8 @@ import { formatValue } from "../utils/index";
 
 import { useDispatch } from "react-redux";
 import { setExpenses } from "../store/actions/expenses";
+
+import EmptyState from "../components/EmpyState";
 
 const OFFSET_VALUE = 5;
 
@@ -54,65 +55,69 @@ const ExpensesList = (props) => {
                {labels[locale].ExpenseListScreen.amountColTitle}
             </Text>
          </View>
-         <FlatList
-            onRefresh={loadExpenses}
-            refreshing={isRefreshing}
-            style={{
-               ...styles.tableBody,
-               height: tableBodyHeight,
-            }}
-            data={expensesToRender}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item: expense }) => (
-               <TouchableOpacity
-                  activeOpacity={0.6}
-                  onPress={() => {
-                     props.onItemPress(expense);
-                  }}
-               >
-                  <View style={styles.tableBodyItem}>
-                     <View style={styles.itemPart}>
-                        <Text style={styles.description}>
-                           {expense.description}
-                        </Text>
-                        <Text style={styles.category}>
-                           {labels[locale].categories[expense.category]}
-                        </Text>
-                        <Text style={styles.date}>
-                           {moment(expense.createdAt)
-                              .locale(locale)
-                              .format("MMMM Do , YYYY")}
-                        </Text>
+         {expenses.length === 0 ? (
+            <EmptyState text="No hay gastos" icon="dollar" />
+         ) : (
+            <FlatList
+               onRefresh={loadExpenses}
+               refreshing={isRefreshing}
+               style={{
+                  ...styles.tableBody,
+                  height: tableBodyHeight,
+               }}
+               data={expensesToRender}
+               keyExtractor={(item) => item.id}
+               renderItem={({ item: expense }) => (
+                  <TouchableOpacity
+                     activeOpacity={0.6}
+                     onPress={() => {
+                        props.onItemPress(expense);
+                     }}
+                  >
+                     <View style={styles.tableBodyItem}>
+                        <View style={styles.itemPart}>
+                           <Text style={styles.description}>
+                              {expense.description}
+                           </Text>
+                           <Text style={styles.category}>
+                              {labels[locale].categories[expense.category]}
+                           </Text>
+                           <Text style={styles.date}>
+                              {moment(expense.createdAt)
+                                 .locale(locale)
+                                 .format("MMMM Do , YYYY")}
+                           </Text>
+                        </View>
+                        <View style={styles.tableBodyItemRight}>
+                           <Text style={styles.amount}>
+                              {formatValue("currency", expense.amount / 100)}
+                           </Text>
+                           <Text style={styles.paymentMethod}>
+                              {
+                                 labels[locale].payment_methods[
+                                    expense.payment_method
+                                 ]
+                              }
+                           </Text>
+                        </View>
                      </View>
-                     <View style={styles.tableBodyItemRight}>
-                        <Text style={styles.amount}>
-                           {formatValue("currency", expense.amount / 100)}
-                        </Text>
-                        <Text style={styles.paymentMethod}>
-                           {
-                              labels[locale].payment_methods[
-                                 expense.payment_method
-                              ]
-                           }
-                        </Text>
+                  </TouchableOpacity>
+               )}
+               ListFooterComponent={() =>
+                  offset < expenses.length && (
+                     <View style={styles.button}>
+                        <Button
+                           color={Colors.blue}
+                           title={labels[locale].ExpenseListScreen.loadMore}
+                           onPress={() => {
+                              setOffset(offset + OFFSET_VALUE);
+                           }}
+                        />
                      </View>
-                  </View>
-               </TouchableOpacity>
-            )}
-            ListFooterComponent={() =>
-               offset < expenses.length && (
-                  <View style={styles.button}>
-                     <Button
-                        color={Colors.blue}
-                        title={labels[locale].ExpenseListScreen.loadMore}
-                        onPress={() => {
-                           setOffset(offset + OFFSET_VALUE);
-                        }}
-                     />
-                  </View>
-               )
-            }
-         />
+                  )
+               }
+            />
+         )}
       </View>
    );
 };
