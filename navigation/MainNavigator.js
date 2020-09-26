@@ -109,70 +109,68 @@ const ProfileNavigator = () => {
 
 const MainNavigator = (props) => {
    return (
-      <NavigationContainer>
-         <AppNavigator.Navigator
-            tabBarOptions={{
-               activeTintColor: "white",
-               tabStyle: {
-                  backgroundColor: Colors.primary,
-                  // paddingBottom: 10,
-               },
-               labelStyle: {
-                  // fontFamily: "montserrat-bold",
-                  // fontSize: 14,
+      <AppNavigator.Navigator
+         tabBarOptions={{
+            activeTintColor: "white",
+            tabStyle: {
+               backgroundColor: Colors.primary,
+               // paddingBottom: 10,
+            },
+            labelStyle: {
+               // fontFamily: "montserrat-bold",
+               // fontSize: 14,
+            },
+         }}
+      >
+         <AppNavigator.Screen
+            name="Expenses"
+            component={ExpenseNavigator}
+            options={{
+               title: "GASTOS",
+               tabBarIcon: (tabInfo) => {
+                  return (
+                     <FontAwesome
+                        name="dollar"
+                        size={tabInfo.size}
+                        color={tabInfo.color}
+                     />
+                  );
                },
             }}
-         >
-            <AppNavigator.Screen
-               name="Expenses"
-               component={ExpenseNavigator}
-               options={{
-                  title: "GASTOS",
-                  tabBarIcon: (tabInfo) => {
-                     return (
-                        <FontAwesome
-                           name="dollar"
-                           size={tabInfo.size}
-                           color={tabInfo.color}
-                        />
-                     );
-                  },
-               }}
-            ></AppNavigator.Screen>
-            <AppNavigator.Screen
-               name="Reports"
-               component={ReportNavigator}
-               options={{
-                  title: "REPORTES",
-                  tabBarIcon: (tabInfo) => {
-                     return (
-                        <FontAwesome
-                           name="bar-chart"
-                           size={tabInfo.size}
-                           color={tabInfo.color}
-                        />
-                     );
-                  },
-               }}
-            ></AppNavigator.Screen>
-            <AppNavigator.Screen
-               name="Profile"
-               component={ProfileNavigator}
-               options={{
-                  title: "PERFIL",
-                  tabBarIcon: (tabInfo) => {
-                     return (
-                        <FontAwesome
-                           name="user-circle-o"
-                           size={tabInfo.size}
-                           color={tabInfo.color}
-                        />
-                     );
-                  },
-               }}
-            ></AppNavigator.Screen>
-         </AppNavigator.Navigator>
-      </NavigationContainer>
+         ></AppNavigator.Screen>
+         <AppNavigator.Screen
+            name="Reports"
+            component={ReportNavigator}
+            options={{
+               title: "REPORTES",
+               tabBarIcon: (tabInfo) => {
+                  return (
+                     <FontAwesome
+                        name="bar-chart"
+                        size={tabInfo.size}
+                        color={tabInfo.color}
+                     />
+                  );
+               },
+            }}
+         ></AppNavigator.Screen>
+         <AppNavigator.Screen
+            name="Profile"
+            component={ProfileNavigator}
+            options={{
+               title: "PERFIL",
+               tabBarIcon: (tabInfo) => {
+                  return (
+                     <FontAwesome
+                        name="user-circle-o"
+                        size={tabInfo.size}
+                        color={tabInfo.color}
+                     />
+                  );
+               },
+            }}
+         ></AppNavigator.Screen>
+      </AppNavigator.Navigator>
    );
 };
 
