@@ -13,6 +13,7 @@
     "@react-navigation/bottom-tabs": "^5.8.0",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
+    "dotenv": "^8.2.0",
     "expo": "~38.0.8",
     "expo-google-app-auth": "^8.1.2",
     "expo-google-sign-in": "~8.2.1",
