@@ -4,16 +4,26 @@ import * as firebase from "firebase/app";
 // These imports load individual services into the firebase namespace.
 import "firebase/auth";
 import "firebase/database";
-// import * as firebase from 'firebase';
+import Constants from "expo-constants";
+
+const {
+   apiKey,
+   authDomain,
+   databaseURL,
+   projectId,
+   storageBucket,
+   messagingSenderId,
+   appId,
+} = Constants.manifest.extra;
 
 const config = {
-   apiKey: "AIzaSyCtE3fsdro_QFtPP539-N4MpBe8N21of4s",
-   authDomain: "expensify-e2139.firebaseapp.com",
-   databaseURL: "https://expensify-e2139.firebaseio.com",
-   projectId: "expensify-e2139",
-   storageBucket: "expensify-e2139.appspot.com",
-   messagingSenderId: "651061411468",
-   appId: "1:651061411468:web:987d179043d1baf6ecc5a9",
+   apiKey,
+   authDomain,
+   databaseURL,
+   projectId,
+   storageBucket,
+   messagingSenderId,
+   appId,
 };
 
 firebase.initializeApp(config);
