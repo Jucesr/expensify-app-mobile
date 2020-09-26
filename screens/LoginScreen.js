@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useDispatch } from "react-redux";
+import {
+   View,
+   Text,
+   StyleSheet,
+   TouchableOpacity,
+   ActivityIndicator,
+   Modal,
+   YellowBox,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import Svg, { Circle } from "react-native-svg";
 
 import * as Google from "expo-google-app-auth";
@@ -8,13 +16,31 @@ import Colors from "../constants/colors";
 import labels from "../constants/labels";
 import { Feather } from "@expo/vector-icons";
 
+import { firebase } from "../firebase/firebase";
+
+YellowBox.ignoreWarnings(["Setting a timer"]);
+
 // Actions
-import { startLogin } from "../store/actions/auth";
+import { startLogin, login } from "../store/actions/auth";
 
 const LoginScreen = (props) => {
    const dispatch = useDispatch();
+   const [isLoading, setIsLoading] = useState(false);
+
+   useEffect(() => {
+      // Store is user is always null otherwise it won't render this Screen
+      const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+         // detaching the listener
+         if (user) {
+            setIsLoading(true);
+            dispatch(login(user));
+         }
+      });
+      return () => unsubscribe(); // unsubscribing from the listener when the component is unmounting.
+   }, []);
 
    const signInWithGoogleAsync = async () => {
+      setIsLoading(true);
       try {
          const result = await Google.logInAsync({
             behavior: "web",
@@ -26,15 +52,31 @@ const LoginScreen = (props) => {
             await dispatch(startLogin(result));
             return result.accessToken;
          } else {
+            setIsLoading(false);
             return { cancelled: true };
          }
       } catch (e) {
+         setIsLoading(false);
          return { error: true };
       }
    };
 
    return (
       <View style={styles.screen}>
+         <Modal
+            animationType="slide"
+            transparent={true}
+            visible={isLoading}
+            style={styles.modal}
+         >
+            <View style={styles.centeredView}>
+               <ActivityIndicator
+                  size="large"
+                  color="white"
+                  style={styles.loader}
+               />
+            </View>
+         </Modal>
          <View style={styles.svgContainer}>
             <Svg
                height="100%"
@@ -120,6 +162,17 @@ const styles = StyleSheet.create({
    buttonText: {
       color: "white",
       fontSize: 18,
+   },
+   centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+   },
+   loader: {
+      // backgroundColor: "red",
+      backgroundColor: "rgba(52, 52, 52, 0.7)",
+      height: "100%",
+      width: "100%",
    },
 });
 

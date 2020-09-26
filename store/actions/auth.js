@@ -4,25 +4,18 @@ import database, {
 } from "../../firebase/firebase";
 
 export const login = (user) => {
-   return (dispatch) => {
+   return async (dispatch) => {
       const { uid, displayName, email, photoURL } = user;
-      return database
-         .ref(`users/${uid}/user_info/`)
-         .set({
-            displayName,
-            email,
-         })
-         .then(() => {
-            dispatch({
-               type: "LOGIN",
-               uid,
-               displayName,
-               photoURL,
-            });
-         })
-         .catch((e) => {
-            console.log(e);
-         });
+      const res = await database.ref(`users/${uid}/user_info/`).set({
+         displayName,
+         email,
+      });
+      return dispatch({
+         type: "LOGIN",
+         uid,
+         displayName,
+         photoURL,
+      });
    };
 };
 
@@ -41,7 +34,8 @@ export const logout = () => ({
 });
 
 export const startLogout = () => {
-   return () => {
-      return firebase.auth().signOut();
+   return async (dispatch) => {
+      await firebase.auth().signOut();
+      return dispatch(logout());
    };
 };

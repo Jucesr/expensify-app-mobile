@@ -12,6 +12,7 @@ import { Feather as Icon } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import moment from "moment";
 
+import { setExpenses } from "../store/actions/expenses";
 import { useSelector, useDispatch } from "react-redux";
 
 import labels from "../constants/labels";
@@ -23,6 +24,12 @@ import { formatValue } from "../utils/index";
 
 const ExpenseListScreen = (props) => {
    const [textFilter, setTextFilter] = useState("");
+   const dispatch = useDispatch();
+
+   useEffect(() => {
+      console.log("Fetching expenses");
+      dispatch(setExpenses());
+   }, []);
    let expenses = useSelector((state) => {
       const filters = state.filters;
 
@@ -35,10 +42,16 @@ const ExpenseListScreen = (props) => {
             isValid = false;
          }
 
-         if (!filters.categories[expense.category]) {
+         if (
+            !filters.categories[expense.category] &&
+            expense.category !== undefined
+         ) {
             isValid = false;
          }
-         if (!filters.paymentMethods[expense.payment_method]) {
+         if (
+            !filters.paymentMethods[expense.payment_method] &&
+            expense.payment_method !== undefined
+         ) {
             isValid = false;
          }
 
