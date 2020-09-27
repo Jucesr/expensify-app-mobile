@@ -10,5 +10,6 @@ export default ({ config }) => ({
       storageBucket: process.env.storageBucket,
       messagingSenderId: process.env.messagingSenderId,
       appId: process.env.appId,
+      googleAndroidClientId: process.env.googleAndroidClientId,
    },
 });
