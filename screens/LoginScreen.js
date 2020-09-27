@@ -47,6 +47,8 @@ const LoginScreen = (props) => {
          const result = await Google.logInAsync({
             behavior: "web",
             androidClientId: Constants.manifest.extra.googleAndroidClientId,
+            androidStandaloneAppClientId:
+               Constants.manifest.extra.googleAndroidClientId,
             scopes: ["profile", "email"],
          });
          if (result.type === "success") {
