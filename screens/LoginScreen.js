@@ -48,7 +48,7 @@ const LoginScreen = (props) => {
             behavior: "web",
             androidClientId: Constants.manifest.extra.googleAndroidClientId,
             androidStandaloneAppClientId:
-               Constants.manifest.extra.googleAndroidClientId,
+               Constants.manifest.extra.androidStandaloneAppClientId,
             scopes: ["profile", "email"],
          });
          if (result.type === "success") {

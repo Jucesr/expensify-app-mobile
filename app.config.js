@@ -11,6 +11,7 @@ export default ({ config }) => ({
       messagingSenderId: process.env.messagingSenderId,
       appId: process.env.appId,
       googleAndroidClientId: process.env.googleAndroidClientId,
+      androidStandaloneAppClientId: process.env.androidStandaloneAppClientId,
    },
    android: {
       ...config.android,
