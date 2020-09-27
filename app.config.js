@@ -12,4 +12,13 @@ export default ({ config }) => ({
       appId: process.env.appId,
       googleAndroidClientId: process.env.googleAndroidClientId,
    },
+   android: {
+      ...config.android,
+      config: {
+         googleSignIn: {
+            apiKey: process.env.googleSignInKey,
+            certificateHash: process.env.googleCertificateHash,
+         },
+      },
+   },
 });
