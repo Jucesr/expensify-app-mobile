@@ -5,18 +5,24 @@ import { Provider } from "react-redux";
 import ReduxThunk from "redux-thunk";
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
+import moment from "moment";
 
 import * as Localization from "expo-localization";
-
+// import i18n from "i18n-js";
 import "moment/locale/es";
+import labels from "./constants/labels";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+
 //  Reducers
 import expensesReducer from "./store/reducers/expenses";
 import authReducer from "./store/reducers/auth";
 import filtersReducer from "./store/reducers/filters";
 import langReducer from "./store/reducers/lang";
-
-// Actions
 import { setLanguage } from "./store/actions/lang";
+
+// const locale = Localization.locale
+const locale = "en";
 
 const rootReducer = combineReducers({
    expenses: expensesReducer,
@@ -27,7 +33,20 @@ const rootReducer = combineReducers({
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
-// store.dispatch(setLanguage(Localization.locale));
+i18n
+   .use(initReactI18next) // passes i18n down to react-i18next
+   .init({
+      resources: labels,
+      lng: Localization.locale,
+      // lng: locale,
+      keySeparator: ".", // we do not use keys in form messages.welcome
+
+      interpolation: {
+         escapeValue: false, // react already safes from xss
+      },
+   });
+
+store.dispatch(setLanguage(Localization.locale));
 
 const fetchFonts = () => {
    return Font.loadAsync({

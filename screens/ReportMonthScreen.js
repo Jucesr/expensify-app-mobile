@@ -8,8 +8,8 @@ import {
    Dimensions,
 } from "react-native";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
-import labels from "../constants/labels";
 import Colors from "../constants/colors";
 import navigation from "../constants/navigation";
 import Chart from "../components/Chart";
@@ -29,6 +29,13 @@ const getDateAsText = (date) => {
 const ReportMonthScreen = (props) => {
    const [today, setToday] = useState(moment().startOf("month"));
    const expenses = useSelector((state) => state.expenses);
+   const { t } = useTranslation();
+
+   useEffect(() => {
+      props.navigation.setOptions({
+         headerTitle: t("ReportMonthScreen.title"),
+      });
+   }, [t]);
 
    const sixMonthAgo = moment(today).subtract(5, "month");
 
@@ -213,42 +220,27 @@ const ReportMonthScreen = (props) => {
             }}
          >
             <Chart
-               title={labels.es.ReportMonthScreen.chartTitle}
+               title={t("ReportMonthScreen.chartTitle")}
                line={getLine(newData)}
             />
-            <Chart title={labels.es.categories.food} line={getLine(foodData)} />
+            <Chart title={t("categories.food")} line={getLine(foodData)} />
+            <Chart title={t("categories.bills")} line={getLine(billsData)} />
+            <Chart title={t("categories.housing")} line={getLine(houseData)} />
             <Chart
-               title={labels.es.categories.bills}
-               line={getLine(billsData)}
-            />
-            <Chart
-               title={labels.es.categories.housing}
-               line={getLine(houseData)}
-            />
-            <Chart
-               title={labels.es.categories.clothing}
+               title={t("categories.clothing")}
                line={getLine(clothingData)}
             />
+            <Chart title={t("categories.health")} line={getLine(healthData)} />
             <Chart
-               title={labels.es.categories.health}
-               line={getLine(healthData)}
-            />
-            <Chart
-               title={labels.es.categories.leisure}
+               title={t("categories.leisure")}
                line={getLine(leisureData)}
             />
             <Chart
-               title={labels.es.categories.transport}
+               title={t("categories.transport")}
                line={getLine(transportData)}
             />
-            <Chart
-               title={labels.es.categories.travel}
-               line={getLine(travelData)}
-            />
-            <Chart
-               title={labels.es.categories.other}
-               line={getLine(otherData)}
-            />
+            <Chart title={t("categories.travel")} line={getLine(travelData)} />
+            <Chart title={t("categories.other")} line={getLine(otherData)} />
          </ScrollView>
       </View>
    );
@@ -280,9 +272,7 @@ const styles = StyleSheet.create({
 });
 
 export const screenOptions = (navData) => {
-   return {
-      headerTitle: labels.es.ReportMonthScreen.title,
-   };
+   return {};
 };
 
 export default ReportMonthScreen;

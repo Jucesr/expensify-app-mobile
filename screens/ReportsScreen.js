@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
 
-import labels from "../constants/labels";
 import Colors from "../constants/colors";
 
 import {
@@ -11,11 +11,17 @@ import {
 } from "@expo/vector-icons";
 
 const ReportsScreen = (props) => {
+   const { t } = useTranslation();
+   useEffect(() => {
+      props.navigation.setOptions({
+         headerTitle: t("ReportsScreen.title"),
+      });
+   }, [t]);
    return (
       <View style={styles}>
          <ReportCard
             icon="md-calendar"
-            title="Reportes por mes"
+            title={t("ReportsScreen.byMonth")}
             onPress={() => {
                props.navigation.navigate("ReportMonthScreen");
             }}
@@ -23,7 +29,7 @@ const ReportsScreen = (props) => {
          <ReportCard
             iconType="materialComunity"
             icon="food"
-            title="Reportes por categoria"
+            title={t("ReportsScreen.byCategory")}
             onPress={() => {
                props.navigation.navigate("ReportCategoryScreen");
             }}
@@ -31,7 +37,7 @@ const ReportsScreen = (props) => {
          <ReportCard
             iconType="material"
             icon="payment"
-            title="Reportes por método de pago"
+            title={t("ReportsScreen.byPaymentMethod")}
             onPress={() => {
                props.navigation.navigate("ReportPaymentMethodScreen");
             }}
@@ -114,9 +120,7 @@ const styles = StyleSheet.create({
 });
 
 export const screenOptions = (navData) => {
-   return {
-      headerTitle: labels.es.ReportsScreen.title,
-   };
+   return {};
 };
 
 export default ReportsScreen;

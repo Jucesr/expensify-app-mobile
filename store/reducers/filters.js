@@ -1,25 +1,20 @@
 import moment from "moment";
-import labels from "../../constants/labels";
+import categories from "../../constants/categories";
+import paymentMethods from "../../constants/paymentMethods";
 
-const categoryInitialState = Object.keys(labels.es.categories).reduce(
-   (acum, key) => {
-      return {
-         ...acum,
-         [key]: true,
-      };
-   },
-   {}
-);
+const categoryInitialState = categories.reduce((acum, key) => {
+   return {
+      ...acum,
+      [key]: true,
+   };
+}, {});
 
-const paymentMethodInitialState = Object.keys(labels.es.payment_methods).reduce(
-   (acum, key) => {
-      return {
-         ...acum,
-         [key]: true,
-      };
-   },
-   {}
-);
+const paymentMethodInitialState = paymentMethods.reduce((acum, key) => {
+   return {
+      ...acum,
+      [key]: true,
+   };
+}, {});
 
 const filterReducerDefaultState = {
    sortBy: "date",

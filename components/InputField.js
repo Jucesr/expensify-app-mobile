@@ -13,8 +13,10 @@ import {
 import moment from "moment";
 
 import Colors from "../constants/colors";
+import { useTranslation } from "react-i18next";
 
 const InputField = ({ label, textInputStyle, type = "text", ...rest }) => {
+   const { t } = useTranslation();
    const renderInput = (type) => {
       switch (type) {
          case "textarea":
@@ -80,7 +82,7 @@ const InputField = ({ label, textInputStyle, type = "text", ...rest }) => {
                   >
                      {rest.value
                         ? moment(rest.value).format("DD MMMM YYYY")
-                        : "Selecciona una fecha"}
+                        : t("InputField.placeholder")}
                   </Text>
                </TouchableOpacity>
             );

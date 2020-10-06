@@ -1,50 +1,51 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Button, StyleSheet, ScrollView } from "react-native";
-import moment from "moment";
 import { Formik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { useTranslation } from "react-i18next";
 
-import labels from "../constants/labels";
+import categories from "../constants/categories";
+import sortBy from "../constants/sortBy";
+import paymentMethods from "../constants/paymentMethods";
 import InputField from "../components/InputField";
 import HeaderButton from "../components/HeaderButton";
 
 import { setFilters } from "../store/actions/filters";
 
-const paymentMethodOptions = Object.keys(labels.es.payment_methods).map(
-   (key) => {
-      const item = labels.es.payment_methods[key];
+const ExpenseFilterScreen = (props) => {
+   const filterState = useSelector((state) => state.filters);
+   const dispatch = useDispatch();
+   const formRef = useRef();
+   const { t } = useTranslation();
+
+   const paymentMethodOptions = paymentMethods.map((key) => {
+      const item = t(`payment_methods.${key}`);
       return {
          label: item,
          value: key,
       };
-   }
-);
+   });
 
-const categoryOptions = Object.keys(labels.es.categories).map((key) => {
-   const item = labels.es.categories[key];
-   return {
-      label: item,
-      value: key,
-   };
-});
+   const categoryOptions = categories.map((key) => {
+      const item = t(`categories.${key}`);
+      return {
+         label: item,
+         value: key,
+      };
+   });
 
-const sortByOptions = Object.keys(labels.es.sort_by).map((key) => {
-   const item = labels.es.sort_by[key];
-   return {
-      label: item,
-      value: key,
-   };
-});
-
-const ExpenseFilterScreen = (props) => {
-   const filterState = useSelector((state) => state.filters);
-   const dispatch = useDispatch();
-
-   const formRef = useRef();
+   const sortByOptions = sortBy.map((key) => {
+      const item = t(`sort_by.${key}`);
+      return {
+         label: item,
+         value: key,
+      };
+   });
 
    useEffect(() => {
       props.navigation.setOptions({
+         headerTitle: t(`ExpenseFilterScreen.title`),
          headerRight: () => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
                <Item
@@ -81,7 +82,7 @@ const ExpenseFilterScreen = (props) => {
             }) => (
                <View>
                   <InputField
-                     label="Ordenar por"
+                     label={t("ExpenseFilterScreen.labels.order_by")}
                      type="select"
                      options={sortByOptions}
                      value={values.sortBy}
@@ -90,7 +91,7 @@ const ExpenseFilterScreen = (props) => {
                      }}
                   />
                   <InputField
-                     label="Fecha de Inicio"
+                     label={t("ExpenseFilterScreen.labels.start_date")}
                      type="date"
                      value={values.startDate}
                      onChangeText={(value) => {
@@ -98,7 +99,7 @@ const ExpenseFilterScreen = (props) => {
                      }}
                   />
                   <InputField
-                     label="Fecha de Fin"
+                     label={t("ExpenseFilterScreen.labels.end_date")}
                      type="date"
                      value={values.endDate}
                      onChangeText={(value) => {
@@ -107,7 +108,7 @@ const ExpenseFilterScreen = (props) => {
                   />
 
                   <InputField
-                     label="Categorias"
+                     label={t("ExpenseFilterScreen.labels.category")}
                      type="check"
                      value={values.categories}
                      options={categoryOptions}
@@ -119,7 +120,7 @@ const ExpenseFilterScreen = (props) => {
                      }}
                   />
                   <InputField
-                     label="Métodos de pago"
+                     label={t("ExpenseFilterScreen.labels.payment_method")}
                      type="check"
                      value={values.paymentMethods}
                      options={paymentMethodOptions}
@@ -146,9 +147,7 @@ const styles = StyleSheet.create({
 });
 
 export const screenOptions = (navData) => {
-   return {
-      headerTitle: labels.es.ExpenseFilterScreen.title,
-   };
+   return {};
 };
 
 export default ExpenseFilterScreen;

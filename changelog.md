@@ -1,3 +1,10 @@
+### V1.1.0
+
+Oct 06, 2020
+
+-  [NEW]
+   -  Finished multi-language
+
 ### V1.0.0
 
 Sept 26, 2020

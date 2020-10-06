@@ -32,6 +32,7 @@ import ReportPaymentMethodScreen, {
 import Colors from "../constants/colors";
 
 import { FontAwesome } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const ExpenseStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -108,6 +109,7 @@ const ProfileNavigator = () => {
 };
 
 const MainNavigator = (props) => {
+   const { t } = useTranslation();
    return (
       <AppNavigator.Navigator
          tabBarOptions={{
@@ -126,7 +128,7 @@ const MainNavigator = (props) => {
             name="Expenses"
             component={ExpenseNavigator}
             options={{
-               title: "GASTOS",
+               title: t("Tabs.expenses"),
                tabBarIcon: (tabInfo) => {
                   return (
                      <FontAwesome
@@ -142,7 +144,7 @@ const MainNavigator = (props) => {
             name="Reports"
             component={ReportNavigator}
             options={{
-               title: "REPORTES",
+               title: t("Tabs.reports"),
                tabBarIcon: (tabInfo) => {
                   return (
                      <FontAwesome
@@ -158,7 +160,7 @@ const MainNavigator = (props) => {
             name="Profile"
             component={ProfileNavigator}
             options={{
-               title: "PERFIL",
+               title: t("Tabs.profile"),
                tabBarIcon: (tabInfo) => {
                   return (
                      <FontAwesome

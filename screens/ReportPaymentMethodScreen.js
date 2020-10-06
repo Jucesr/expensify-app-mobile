@@ -9,7 +9,6 @@ import {
    Dimensions,
 } from "react-native";
 
-import labels from "../constants/labels";
 import Colors from "../constants/colors";
 import moment from "moment";
 
@@ -18,21 +17,22 @@ import InputField from "../components/InputField";
 import FilterButton from "../components/FilterButton";
 
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const ReportPaymentMethodScreen = (props) => {
+   const { t } = useTranslation();
    const [filterActive, setFilterActive] = useState("all");
    const [modalVisible, setModalVisible] = useState(false);
-   const [title, setTitle] = useState("Todo");
+   const [title, setTitle] = useState(t("ReportsScreen.filterButtons.all"));
    const [startDate, setStartDate] = useState();
    const [endDate, setEndDate] = useState();
 
    const locale = useSelector((state) => state.lang.locale);
    const expenses = useSelector((state) => state.expenses);
-   const dictonary = labels[locale].ReportPaymentMethodScreen;
 
    useEffect(() => {
       props.navigation.setOptions({
-         headerTitle: dictonary.title,
+         headerTitle: t("ReportPaymentMethodScreen.title"),
       });
    }, [locale]);
 
@@ -105,7 +105,7 @@ const ReportPaymentMethodScreen = (props) => {
 
    const chartData = expensesByPaymentMethod.map((payment_method) => ({
       ...payment_method,
-      name: labels[locale].payment_methods[payment_method._description],
+      name: t(`payment_methods.${payment_method._description}`),
       color: Colors.payment_methods[payment_method._description],
       legendFontColor: "#7F7F7F",
       legendFontSize: 15,
@@ -133,10 +133,12 @@ const ReportPaymentMethodScreen = (props) => {
             <View style={styles.centeredView}>
                <ScrollView>
                   <View style={styles.modalView}>
-                     <Text style={styles.sectionTitle}>Fecha exacta</Text>
+                     <Text style={styles.sectionTitle}>
+                        {t("ReportsScreen.filterSection.exactDate")}
+                     </Text>
                      <View>
                         <InputField
-                           label="Fecha de Inicio"
+                           label={t("ReportsScreen.filterSection.startDate")}
                            type="date"
                            value={startDate}
                            onChangeText={(newDate) =>
@@ -144,7 +146,7 @@ const ReportPaymentMethodScreen = (props) => {
                            }
                         />
                         <InputField
-                           label="Fecha de Fin"
+                           label={t("ReportsScreen.filterSection.endDate")}
                            type="date"
                            value={endDate}
                            onChangeText={(newDate) =>
@@ -153,102 +155,110 @@ const ReportPaymentMethodScreen = (props) => {
                         />
                      </View>
 
-                     <Text style={styles.sectionTitle}>Mes</Text>
+                     <Text style={styles.sectionTitle}>
+                        {t("ReportsScreen.filterSection.month")}
+                     </Text>
                      <View style={styles.buttonContainer}>
                         <FilterButton
                            name="month.0"
-                           text="Este mes"
+                           text={t("ReportsScreen.filterButtons.thisMonth")}
                            active={filterActive}
                            onPress={setFilter("month.0")}
                         />
                         <FilterButton
                            name="month.1"
-                           text="Hace 1 mes"
+                           text={t("ReportsScreen.filterButtons.lastMonth")}
                            active={filterActive}
                            onPress={setFilter("month.1")}
                         />
                         <FilterButton
                            name="month.2"
-                           text="Hace 2 meses"
+                           text={t("ReportsScreen.filterButtons.twoMonth")}
                            active={filterActive}
                            onPress={setFilter("month.2")}
                         />
                         <FilterButton
                            name="month.3"
-                           text="Hace 3 meses"
+                           text={t("ReportsScreen.filterButtons.threeMonth")}
                            active={filterActive}
                            onPress={setFilter("month.3")}
                         />
                      </View>
-                     <Text style={styles.sectionTitle}>Semana</Text>
+                     <Text style={styles.sectionTitle}>
+                        {t("ReportsScreen.filterSection.week")}
+                     </Text>
                      <View style={styles.buttonContainer}>
                         <FilterButton
                            name="week.0"
-                           text="Esta semana"
+                           text={t("ReportsScreen.filterButtons.thisWeek")}
                            active={filterActive}
                            onPress={setFilter("week.0")}
                         />
                         <FilterButton
                            name="week.1"
-                           text="Semana pasada"
+                           text={t("ReportsScreen.filterButtons.lastWeek")}
                            active={filterActive}
                            onPress={setFilter("week.1")}
                         />
                         <FilterButton
                            name="week.2"
-                           text="Hace 2 semanas"
+                           text={t("ReportsScreen.filterButtons.twoWeek")}
                            active={filterActive}
                            onPress={setFilter("week.2")}
                         />
                      </View>
-                     <Text style={styles.sectionTitle}>Días</Text>
+                     <Text style={styles.sectionTitle}>
+                        {t("ReportsScreen.filterSection.day")}
+                     </Text>
 
                      <View style={styles.buttonContainer}>
                         <FilterButton
                            name="day.0"
-                           text="Hoy"
+                           text={t("ReportsScreen.filterButtons.thisDay")}
                            active={filterActive}
                            onPress={setFilter("day.0")}
                         />
 
                         <FilterButton
                            name="day.1"
-                           text="Ayer"
+                           text={t("ReportsScreen.filterButtons.lastDay")}
                            active={filterActive}
                            onPress={setFilter("day.1")}
                         />
                         <FilterButton
                            name="day.2"
-                           text="Hace 2 días"
+                           text={t("ReportsScreen.filterButtons.twoDay")}
                            active={filterActive}
                            onPress={setFilter("day.2")}
                         />
                      </View>
 
-                     <Text style={styles.sectionTitle}>Año</Text>
+                     <Text style={styles.sectionTitle}>
+                        {t("ReportsScreen.filterSection.year")}
+                     </Text>
 
                      <View style={styles.buttonContainer}>
                         <FilterButton
                            name="year.0"
-                           text="Este año"
+                           text={t("ReportsScreen.filterButtons.thisYear")}
                            active={filterActive}
                            onPress={setFilter("year.0")}
                         />
                         <FilterButton
                            name="year.1"
-                           text="Hace 1 año"
+                           text={t("ReportsScreen.filterButtons.lastYear")}
                            active={filterActive}
                            onPress={setFilter("year.1")}
                         />
                         <FilterButton
                            name="year.2"
-                           text="Hace 2 años"
+                           text={t("ReportsScreen.filterButtons.twoYear")}
                            active={filterActive}
                            onPress={setFilter("year.2")}
                         />
                         <FilterButton
                            name="year.3"
-                           text="Hace 3 años"
+                           text={t("ReportsScreen.filterButtons.threeYear")}
                            active={filterActive}
                            onPress={setFilter("year.3")}
                         />
@@ -273,79 +283,80 @@ const ReportPaymentMethodScreen = (props) => {
             data={chartData}
             accessor="total"
             absolute={false}
-            noDataMessage={dictonary.noDataMessage}
+            noDataMessage={t("ReportPaymentMethodScreen.noDataMessage")}
          />
 
          <View style={styles.buttonContainer}>
             <FilterButton
                name="all"
-               text="Todo"
+               text={t("ReportsScreen.filterButtons.all")}
                active={filterActive}
                onPress={setFilter("all")}
             />
             <FilterButton
                name="year.0"
-               text="Este año"
+               text={t("ReportsScreen.filterButtons.thisYear")}
                active={filterActive}
                onPress={setFilter("year.0")}
             />
             <FilterButton
                name="month.1"
-               text="Mes pasado"
+               text={t("ReportsScreen.filterButtons.lastMonth")}
                active={filterActive}
                onPress={setFilter("month.1")}
             />
             <FilterButton
                name="month.0"
-               text="Este mes"
+               text={t("ReportsScreen.filterButtons.thisMonth")}
                active={filterActive}
                onPress={setFilter("month.0")}
             />
             <FilterButton
-               name="week.1"
-               text="Semana pasada"
-               active={filterActive}
-               onPress={setFilter("week.1")}
-            />
-            <FilterButton
                name="week.0"
-               text="Esta semana"
+               text={t("ReportsScreen.filterButtons.thisWeek")}
                active={filterActive}
                onPress={setFilter("week.0")}
             />
             <FilterButton
+               name="week.1"
+               text={t("ReportsScreen.filterButtons.lastWeek")}
+               active={filterActive}
+               onPress={setFilter("week.1")}
+            />
+            <FilterButton
                name="day.1"
-               text="Ayer"
+               text={t("ReportsScreen.filterButtons.lastDay")}
                active={filterActive}
                onPress={setFilter("day.1")}
             />
             <FilterButton
                name="day.0"
-               text="Hoy"
+               text={t("ReportsScreen.filterButtons.thisDay")}
                active={filterActive}
                onPress={setFilter("day.0")}
             />
+
             <FilterButton
                name="last.7"
-               text="Últimos 7 días"
+               text={t("ReportsScreen.filterButtons.last7Days")}
                active={filterActive}
                onPress={setFilter("last.7")}
             />
             <FilterButton
                name="last.15"
-               text="Últimos 15 días"
+               text={t("ReportsScreen.filterButtons.last15Days")}
                active={filterActive}
                onPress={setFilter("last.15")}
             />
             <FilterButton
                name="last.30"
-               text="Últimos 30 días"
+               text={t("ReportsScreen.filterButtons.last30Days")}
                active={filterActive}
                onPress={setFilter("last.30")}
             />
             <FilterButton
                name="ver.mas"
-               text="Ver más"
+               text={t("ReportsScreen.filterButtons.viewMore")}
                onPress={() => {
                   setModalVisible(true);
                }}
@@ -408,9 +419,7 @@ const styles = StyleSheet.create({
 });
 
 export const screenOptions = (navData) => {
-   return {
-      headerTitle: labels.es.ReportPaymentMethodScreen.title,
-   };
+   return {};
 };
 
 export default ReportPaymentMethodScreen;

@@ -8,9 +8,9 @@ import {
    TouchableOpacity,
 } from "react-native";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 import Colors from "../constants/colors";
-import labels from "../constants/labels";
 import { formatValue } from "../utils/index";
 
 import { useDispatch } from "react-redux";
@@ -24,12 +24,11 @@ const ExpensesList = (props) => {
    const { expenses, locale } = props;
 
    const [offset, setOffset] = useState(OFFSET_VALUE);
+   const [isRefreshing, setIsRefreshing] = useState(false);
+   const dispatch = useDispatch();
+   const { t } = useTranslation();
 
    const expensesToRender = expenses.slice(0, offset);
-
-   const [isRefreshing, setIsRefreshing] = useState(false);
-
-   const dispatch = useDispatch();
 
    const loadExpenses = useCallback(async () => {
       setIsRefreshing(true);
@@ -49,10 +48,10 @@ const ExpensesList = (props) => {
       <View style={styles.table}>
          <View style={styles.tableHeader}>
             <Text style={styles.tableColumnText}>
-               {labels[locale].ExpenseListScreen.expenseColTitle}
+               {t("ExpenseListScreen.expenseColTitle")}
             </Text>
             <Text style={styles.tableColumnText}>
-               {labels[locale].ExpenseListScreen.amountColTitle}
+               {t("ExpenseListScreen.amountColTitle")}
             </Text>
          </View>
          {expenses.length === 0 ? (
@@ -80,11 +79,11 @@ const ExpensesList = (props) => {
                               {expense.description}
                            </Text>
                            <Text style={styles.category}>
-                              {labels[locale].categories[expense.category]}
+                              {t(`categories.${expense.category}`)}
                            </Text>
                            <Text style={styles.date}>
                               {moment(expense.createdAt)
-                                 .locale(locale)
+                                 // .locale(locale)
                                  .format("MMMM Do , YYYY")}
                            </Text>
                         </View>
@@ -93,11 +92,7 @@ const ExpensesList = (props) => {
                               {formatValue("currency", expense.amount / 100)}
                            </Text>
                            <Text style={styles.paymentMethod}>
-                              {
-                                 labels[locale].payment_methods[
-                                    expense.payment_method
-                                 ]
-                              }
+                              {t(`payment_methods.${expense.payment_method}`)}
                            </Text>
                         </View>
                      </View>
@@ -108,7 +103,7 @@ const ExpensesList = (props) => {
                      <View style={styles.button}>
                         <Button
                            color={Colors.blue}
-                           title={labels[locale].ExpenseListScreen.loadMore}
+                           title={t("ExpenseListScreen.loadMore")}
                            onPress={() => {
                               setOffset(offset + OFFSET_VALUE);
                            }}

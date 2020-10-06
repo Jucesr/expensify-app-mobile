@@ -13,7 +13,8 @@ import Svg, { Circle } from "react-native-svg";
 
 import * as Google from "expo-google-app-auth";
 import Colors from "../constants/colors";
-import labels from "../constants/labels";
+import { useTranslation } from "react-i18next";
+
 import { Feather } from "@expo/vector-icons";
 
 import { firebase } from "../firebase/firebase";
@@ -28,6 +29,7 @@ import { startLogin, login } from "../store/actions/auth";
 const LoginScreen = (props) => {
    const dispatch = useDispatch();
    const [isLoading, setIsLoading] = useState(false);
+   const { t } = useTranslation();
 
    useEffect(() => {
       // Store is user is always null otherwise it won't render this Screen
@@ -101,9 +103,9 @@ const LoginScreen = (props) => {
 
          <View style={styles.container}>
             <Text style={styles.title}>Expensify</Text>
-            <Text style={styles.slogan}>{labels.es.LoginScreen.slogan}</Text>
+            <Text style={styles.slogan}>{t("LoginScreen.slogan")}</Text>
             <Button onPress={signInWithGoogleAsync}>
-               {labels.es.LoginScreen.button}
+               {t("LoginScreen.button")}
             </Button>
          </View>
       </View>

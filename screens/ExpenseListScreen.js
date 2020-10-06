@@ -15,7 +15,8 @@ import moment from "moment";
 import { setExpenses } from "../store/actions/expenses";
 import { useSelector, useDispatch } from "react-redux";
 
-import labels from "../constants/labels";
+import { useTranslation, Trans } from "react-i18next";
+
 import HeaderButton from "../components/HeaderButton";
 import ExpenseList from "../components/ExpensesList";
 import Colors from "../constants/colors";
@@ -36,11 +37,19 @@ const HEIGTH = {
 const ExpenseListScreen = (props) => {
    const headerHeight = useHeaderHeight();
    const [textFilter, setTextFilter] = useState("");
+   const { t } = useTranslation();
    const dispatch = useDispatch();
 
    useEffect(() => {
       dispatch(setExpenses());
    }, []);
+
+   useEffect(() => {
+      props.navigation.setOptions({
+         headerTitle: t("ExpenseListScreen.title"),
+      });
+   }, [t]);
+
    let expenses = useSelector((state) => {
       const filters = state.filters;
 
@@ -109,9 +118,7 @@ const ExpenseListScreen = (props) => {
                />
                <TextInput
                   style={styles.input}
-                  placeholder={
-                     labels.es.ExpenseListScreen.searchInputPlaceholder
-                  }
+                  placeholder={t("ExpenseListScreen.searchInputPlaceholder")}
                   onChangeText={changeTextFilterHandler}
                   value={textFilter}
                   underlineColorAndroid="transparent"
@@ -134,11 +141,17 @@ const ExpenseListScreen = (props) => {
          {expenses.length > 0 && (
             <View style={styles.messageContainer}>
                <Text style={styles.message}>
-                  Viendo <Text style={styles.bold}>{expenses.length}</Text>{" "}
-                  gastos, un total de{" "}
-                  <Text style={styles.bold}>
-                     {formatValue("currency", expenseTotal / 100)}
-                  </Text>
+                  <Trans
+                     i18nKey="ExpenseListScreen.totalMessage"
+                     values={{
+                        expenseCount: expenses.length,
+                        expenseTotal: formatValue(
+                           "currency",
+                           expenseTotal / 100
+                        ),
+                     }}
+                     components={[<Text style={styles.bold} />]}
+                  ></Trans>
                </Text>
             </View>
          )}
@@ -215,7 +228,7 @@ const styles = StyleSheet.create({
 
 export const screenOptions = (navData) => {
    return {
-      headerTitle: labels.es.ExpenseListScreen.title,
+      headerTitle: "ExpenseListScreen",
       headerRight: () => (
          <HeaderButtons HeaderButtonComponent={HeaderButton}>
             <Item

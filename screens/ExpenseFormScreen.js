@@ -18,41 +18,45 @@ import {
    editExpense,
    removeExpense,
 } from "../store/actions/expenses";
-import labels from "../constants/labels";
+import paymentMethods from "../constants/paymentMethods";
+import categories from "../constants/categories";
 
-const paymentMethodOptions = Object.keys(labels.es.payment_methods).map(
-   (key) => {
-      const item = labels.es.payment_methods[key];
-      return {
-         label: item,
-         value: key,
-      };
-   }
-);
-
-const categoryOptions = Object.keys(labels.es.categories).map((key) => {
-   const item = labels.es.categories[key];
-   return {
-      label: item,
-      value: key,
-   };
-});
+import { useTranslation } from "react-i18next";
 
 const ExpenseFormScreen = (props) => {
    const dispatch = useDispatch();
-   const locale = useSelector((state) => state.lang.locale);
-   console.log(locale);
+   const { t } = useTranslation();
 
    const [isLoading, setIsLoading] = useState(false);
    const expense = props.route.params && props.route.params.expense;
 
    const formRef = useRef();
 
-   const dictonary = labels[locale].ExpenseFormScreen;
+   const paymentMethodOptions = paymentMethods.map((key) => {
+      const item = t(`payment_methods.${key}`);
+      return {
+         label: item,
+         value: key,
+      };
+   });
+
+   const categoryOptions = categories.map((key) => {
+      const item = t(`categories.${key}`);
+      return {
+         label: item,
+         value: key,
+      };
+   });
 
    useEffect(() => {
       props.navigation.setOptions({
-         headerTitle: expense ? dictonary.editTitle : dictonary.addTitle,
+         headerTitle: t(
+            `${
+               expense
+                  ? "ExpenseFormScreen.editTitle"
+                  : "ExpenseFormScreen.addTitle"
+            }`
+         ),
          headerRight: () => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
                <Item
@@ -87,8 +91,8 @@ const ExpenseFormScreen = (props) => {
                      iconName="md-trash"
                      onPress={() => {
                         Alert.alert(
-                           dictonary.confirmTitle,
-                           dictonary.confirmMessage,
+                           t("ExpenseFormScreen.confirmTitle"),
+                           t("ExpenseFormScreen.confirmMessage"),
                            [
                               {
                                  text: "Cancel",
@@ -113,7 +117,7 @@ const ExpenseFormScreen = (props) => {
             </HeaderButtons>
          ),
       });
-   }, [formRef, locale]);
+   }, [formRef, t]);
 
    if (isLoading) {
       return <ActivityIndicator size="large" color="#0000ff" />;
@@ -159,7 +163,7 @@ const ExpenseFormScreen = (props) => {
             }) => (
                <View>
                   <InputField
-                     label="Método de pago"
+                     label={t("ExpenseFormScreen.labels.payment_method")}
                      type="select"
                      options={paymentMethodOptions}
                      value={values.payment_method}
@@ -168,7 +172,7 @@ const ExpenseFormScreen = (props) => {
                      }}
                   />
                   <InputField
-                     label="Categoria"
+                     label={t("ExpenseFormScreen.labels.category")}
                      type="select"
                      value={values.category}
                      options={categoryOptions}
@@ -177,36 +181,33 @@ const ExpenseFormScreen = (props) => {
                      }}
                   />
                   <InputField
-                     label="Nombre"
+                     label={t("ExpenseFormScreen.labels.name")}
                      value={values.description}
                      onChangeText={handleChange("description")}
                      onBlur={handleBlur("description")}
                   />
                   <InputField
+                     label={t("ExpenseFormScreen.labels.amount")}
                      type="currency"
-                     label="Costo"
                      value={values.amount}
                      onChangeText={handleChange("amount")}
                      onBlur={handleBlur("amount")}
                   />
                   <InputField
+                     label={t("ExpenseFormScreen.labels.date")}
                      type="date"
-                     label="Fecha"
                      value={values.createdAt}
                      onChangeText={(value) => {
                         setFieldValue("createdAt", value);
                      }}
                   />
                   <InputField
-                     label="Descripción (opcional)"
+                     label={t("ExpenseFormScreen.labels.description")}
                      value={values.note}
                      onChangeText={handleChange("note")}
                      onBlur={handleBlur("note")}
                      type="textarea"
                   />
-                  {/* <View style={styles.button}>
-                     <Button onPress={handleSubmit} title="Aceptar" />
-                  </View> */}
                </View>
             )}
          </Formik>
@@ -224,22 +225,7 @@ const styles = StyleSheet.create({
 
 export const screenOptions = (navData) => {
    const expense = navData.route.params && navData.route.params.expense;
-   return {
-      headerTitle: expense
-         ? labels.es.ExpenseFormScreen.editTitle
-         : labels.es.ExpenseFormScreen.addTitle,
-      // headerRight: (
-      //    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      //      <Item
-      //        title="Save"
-      //        iconName={
-      //          Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'
-      //        }
-      //        onPress={submitFn}
-      //      />
-      //    </HeaderButtons>
-      //  )
-   };
+   return {};
 };
 
 export default ExpenseFormScreen;

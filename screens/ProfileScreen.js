@@ -9,22 +9,23 @@ import {
 } from "react-native";
 
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import { startLogout } from "../store/actions/auth";
 import { setLanguage } from "../store/actions/lang";
 
-import labels from "../constants/labels";
 import Colors from "../constants/colors";
 import InputField from "../components/InputField";
 import { formatValue } from "../utils";
+import languages from "../constants/languages";
 
 const ProfileScreen = (props) => {
    const user = useSelector((state) => state.auth);
    const expenses = useSelector((state) => state.expenses);
    const dispatch = useDispatch();
+   const { t } = useTranslation();
 
    const locale = useSelector((state) => state.lang.locale);
-   const dictonary = labels[locale].ProfileScreen;
 
    const expenseTotal = useMemo(() => {
       return expenses.reduce((sum, expense) => sum + expense.amount, 0);
@@ -36,9 +37,9 @@ const ProfileScreen = (props) => {
 
    useEffect(() => {
       props.navigation.setOptions({
-         headerTitle: dictonary.title,
+         headerTitle: t("ProfileScreen.title"),
       });
-   }, [locale]);
+   }, [t]);
 
    return (
       <View style={styles}>
@@ -54,7 +55,9 @@ const ProfileScreen = (props) => {
 
                <TouchableOpacity activeOpacity={0.6} onPress={signOutHandler}>
                   <View style={styles.button}>
-                     <Text style={styles.buttonText}>{dictonary.signOut}</Text>
+                     <Text style={styles.buttonText}>
+                        {t("ProfileScreen.signOut")}
+                     </Text>
                   </View>
                </TouchableOpacity>
             </View>
@@ -65,30 +68,24 @@ const ProfileScreen = (props) => {
                   {formatValue("currency", expenseTotal / 100)}
                </Text>
                <Text style={styles.boxContent}>
-                  {dictonary.expenseTotalMessage}
+                  {t("ProfileScreen.expenseTotalMessage")}
                </Text>
             </View>
             <View style={styles.box}>
                <Text style={styles.boxTitle}>{expenses.length}</Text>
                <Text style={styles.boxContent}>
-                  {dictonary.expenseCountMessage}
+                  {t("ProfileScreen.expenseCountMessage")}
                </Text>
             </View>
          </View>
          <View>
             <InputField
-               label={dictonary.inputText}
+               label={t("ProfileScreen.inputText")}
                type="select"
-               options={[
-                  {
-                     label: "Español",
-                     value: "es",
-                  },
-                  {
-                     label: "English",
-                     value: "en",
-                  },
-               ]}
+               options={languages.map((lan) => ({
+                  label: t(`languages.${lan}`),
+                  value: lan,
+               }))}
                value={locale}
                onChangeText={(value) => {
                   dispatch(setLanguage(value));
@@ -155,9 +152,7 @@ const styles = StyleSheet.create({
 });
 
 export const screenOptions = (navData) => {
-   return {
-      headerTitle: labels.es.ProfileScreen.title,
-   };
+   return {};
 };
 
 export default ProfileScreen;
