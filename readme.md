@@ -20,9 +20,9 @@ See also the list of [dependencies](https://github.com/Jucesr/expensify-app-mobi
 
 ## Screenshots
 
-| Login Screen                                                                                     | Cart Screen                                                                                      |
-| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
-| <img src="https://github.com/Jucesr/rn-shop-app/blob/master/assets/img/ShopScreen.PNG?raw=true"> | <img src="https://github.com/Jucesr/rn-shop-app/blob/master/assets/img/CartScreen.PNG?raw=true"> |
+| Login Screen                                                                                               | Expenses List Screen                                                                                             |
+| ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/Jucesr/expensify-app-mobile/blob/master/assets/img/LoginScreen.PNG?raw=true"> | <img src="https://github.com/Jucesr/expensify-app-mobile/blob/master/assets/img/ExpenseListScreen.PNG?raw=true"> |
 
 ## Authors
 
