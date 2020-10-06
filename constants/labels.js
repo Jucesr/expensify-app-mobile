@@ -139,8 +139,8 @@ export default {
    en: {
       translation: {
          LoginScreen: {
-            button: "Iniciar sesión con Google",
-            slogan: "Llegó el momento de controlar tus gastos",
+            button: "Sign in With Google",
+            slogan: "It's time to control your expenses",
          },
          ExpenseListScreen: {
             title: "Expenses",
