@@ -24,6 +24,18 @@ See also the list of [dependencies](https://github.com/Jucesr/expensify-app-mobi
 | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | <img src="https://github.com/Jucesr/expensify-app-mobile/blob/master/assets/img/LoginScreen.PNG?raw=true"> | <img src="https://github.com/Jucesr/expensify-app-mobile/blob/master/assets/img/ExpenseListScreen.PNG?raw=true"> |
 
+| Expense Form Screen                                                                                              | Expenses Filter Screen                                                                                             |
+| ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/Jucesr/expensify-app-mobile/blob/master/assets/img/ExpenseFormScreen.PNG?raw=true"> | <img src="https://github.com/Jucesr/expensify-app-mobile/blob/master/assets/img/ExpenseFilterScreen.PNG?raw=true"> |
+
+| Expense Report Screen                                                                                               | Expenses Reports by month                                                                                           |
+| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/Jucesr/expensify-app-mobile/blob/master/assets/img/ExpenseReportsScreen.PNG?raw=true"> | <img src="https://github.com/Jucesr/expensify-app-mobile/blob/master/assets/img/ReportsByMonthScreen.PNG?raw=true"> |
+
+| Expense By Payment method                                                                                                   | Expenses By Category                                                                                                   |
+| --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/Jucesr/expensify-app-mobile/blob/master/assets/img/ExpenseReportByPaymentMethod.PNG?raw=true"> | <img src="https://github.com/Jucesr/expensify-app-mobile/blob/master/assets/img/ExpenseReportByCategory.PNG?raw=true"> |
+
 ## Authors
 
 -  **Julio Ojeda** - _App_, _UI Design_ - [Contact](https://www.linkedin.com/in/julio-ojeda-9640a9113/)
