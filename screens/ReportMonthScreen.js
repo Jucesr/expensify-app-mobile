@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import {
    View,
    Text,
@@ -6,48 +6,48 @@ import {
    TouchableOpacity,
    ScrollView,
    Dimensions,
-} from "react-native";
-import { useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
+} from 'react-native';
+import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 
-import Colors from "../constants/colors";
-import navigation from "../constants/navigation";
-import Chart from "../components/Chart";
+import Colors from '../constants/colors';
+import navigation from '../constants/navigation';
+import Chart from '../components/Chart';
 
-import moment from "moment";
-import capitalize from "lodash/capitalize";
-import times from "lodash/times";
-import { replaceAll, formatValue } from "../utils";
+import moment from 'moment';
+import capitalize from 'lodash/capitalize';
+import times from 'lodash/times';
+import {replaceAll, formatValue} from '../utils';
 
-import { useHeaderHeight } from "@react-navigation/stack";
+import {useHeaderHeight} from '@react-navigation/stack';
 
 const getDateAsText = (date) => {
-   const text = date.format("MMMM");
-   return capitalize(replaceAll(text, "\\.", ""));
+   const text = date.format('MMMM');
+   return capitalize(replaceAll(text, '\\.', ''));
 };
 
 const ReportMonthScreen = (props) => {
-   const [today, setToday] = useState(moment().startOf("month"));
+   const [today, setToday] = useState(moment().startOf('month'));
    const expenses = useSelector((state) => state.expenses);
-   const { t } = useTranslation();
+   const {t} = useTranslation();
 
    useEffect(() => {
       props.navigation.setOptions({
-         headerTitle: t("ReportMonthScreen.title"),
+         headerTitle: t('ReportMonthScreen.title'),
       });
    }, [t]);
 
-   const sixMonthAgo = moment(today).subtract(5, "month");
+   const sixMonthAgo = moment(today).subtract(5, 'month');
 
    const sixMonthAgoLabels = times(6, (n) => {
-      return moment(sixMonthAgo).add(n, "month").format("MMM YY");
+      return moment(sixMonthAgo).add(n, 'month').format('MMM YY');
    });
 
    const filterByDate = (expense) => {
       let isValid = true;
       if (
-         moment(expense.createdAt).isBefore(sixMonthAgo.startOf("month")) ||
-         moment(expense.createdAt).isAfter(today.endOf("month"))
+         moment(expense.createdAt).isBefore(sixMonthAgo.startOf('month')) ||
+         moment(expense.createdAt).isAfter(today.endOf('month'))
       ) {
          isValid = false;
       }
@@ -57,8 +57,8 @@ const ReportMonthScreen = (props) => {
    const filterByCategory = (category) => (expense) => {
       let isValid = true;
       if (
-         moment(expense.createdAt).isBefore(sixMonthAgo.startOf("month")) ||
-         moment(expense.createdAt).isAfter(today.endOf("month"))
+         moment(expense.createdAt).isBefore(sixMonthAgo.startOf('month')) ||
+         moment(expense.createdAt).isAfter(today.endOf('month'))
       ) {
          isValid = false;
       }
@@ -74,7 +74,7 @@ const ReportMonthScreen = (props) => {
          const expensesInRange = expenses.filter(filterFunc);
 
          const sixMonthAgoObj = times(6, (n) => {
-            return moment(sixMonthAgo).add(n, "month").format("YYYYMM");
+            return moment(sixMonthAgo).add(n, 'month').format('YYYYMM');
          }).reduce((acum, key) => {
             return {
                ...acum,
@@ -86,11 +86,11 @@ const ReportMonthScreen = (props) => {
 
          // Get the total of each month
          const rawData = expensesInRange.reduce((acum, expense) => {
-            const month = moment(expense.createdAt).startOf("month");
+            const month = moment(expense.createdAt).startOf('month');
             let total = 0;
             total = expense.amount / 100;
-            const monthString = month.format("YYYYMM");
-            const label = month.format("MMM YY");
+            const monthString = month.format('YYYYMM');
+            const label = month.format('MMM YY');
             return {
                ...acum,
                [monthString]: acum[monthString]
@@ -103,7 +103,7 @@ const ReportMonthScreen = (props) => {
                        label,
                        monthString,
                     }
-                  : { total, label, monthString },
+                  : {total, label, monthString},
             };
          }, sixMonthAgoObj);
 
@@ -119,43 +119,47 @@ const ReportMonthScreen = (props) => {
                return aInt - bInt;
             });
       },
-      [expenses, today]
+      [expenses, today],
    );
 
    const dataObj = useMemo(dataFunction(filterByDate), [expenses, today]);
-   const foodDataObj = useMemo(dataFunction(filterByCategory("food")), [
+   const foodDataObj = useMemo(dataFunction(filterByCategory('food')), [
       expenses,
       today,
    ]);
-   const billsDataObj = useMemo(dataFunction(filterByCategory("bills")), [
+   const billsDataObj = useMemo(dataFunction(filterByCategory('bills')), [
       expenses,
       today,
    ]);
-   const houseDataObj = useMemo(dataFunction(filterByCategory("housing")), [
+   const houseDataObj = useMemo(dataFunction(filterByCategory('housing')), [
       expenses,
       today,
    ]);
-   const clothingDataObj = useMemo(dataFunction(filterByCategory("clothing")), [
+   const clothingDataObj = useMemo(dataFunction(filterByCategory('clothing')), [
       expenses,
       today,
    ]);
-   const healthDataObj = useMemo(dataFunction(filterByCategory("health")), [
+   const healthDataObj = useMemo(dataFunction(filterByCategory('health')), [
       expenses,
       today,
    ]);
-   const leisureDataObj = useMemo(dataFunction(filterByCategory("leisure")), [
+   const leisureDataObj = useMemo(dataFunction(filterByCategory('leisure')), [
       expenses,
       today,
    ]);
    const tranportDataObj = useMemo(
-      dataFunction(filterByCategory("transport")),
-      [expenses, today]
+      dataFunction(filterByCategory('transport')),
+      [expenses, today],
    );
-   const travelDataObj = useMemo(dataFunction(filterByCategory("travel")), [
+   const travelDataObj = useMemo(dataFunction(filterByCategory('travel')), [
       expenses,
       today,
    ]);
-   const otherDataObj = useMemo(dataFunction(filterByCategory("other")), [
+   const otherDataObj = useMemo(dataFunction(filterByCategory('other')), [
+      expenses,
+      today,
+   ]);
+   const kidsDataObj = useMemo(dataFunction(filterByCategory('kids')), [
       expenses,
       today,
    ]);
@@ -170,7 +174,7 @@ const ReportMonthScreen = (props) => {
             },
          ],
       }),
-      [sixMonthAgoLabels]
+      [sixMonthAgoLabels],
    );
 
    const getTotal = useCallback((d) => (d.total ? d.total : 0));
@@ -186,11 +190,12 @@ const ReportMonthScreen = (props) => {
    const transportData = tranportDataObj.map(getTotal);
    const travelData = travelDataObj.map(getTotal);
    const otherData = otherDataObj.map(getTotal);
+   const kidsData = kidsDataObj.map(getTotal);
 
    const headerHeight = useHeaderHeight();
 
    const resultHeight =
-      Dimensions.get("window").height -
+      Dimensions.get('window').height -
       40 -
       navigation.BOTTOM_TAB_HEIGHT -
       headerHeight;
@@ -200,7 +205,7 @@ const ReportMonthScreen = (props) => {
             <Button
                text="<"
                onPress={() => {
-                  setToday(moment(today).subtract(1, "month"));
+                  setToday(moment(today).subtract(1, 'month'));
                }}
             />
             <Text>
@@ -209,7 +214,7 @@ const ReportMonthScreen = (props) => {
             <Button
                text=">"
                onPress={() => {
-                  setToday(moment(today).add(1, "month"));
+                  setToday(moment(today).add(1, 'month'));
                }}
             />
          </View>
@@ -220,33 +225,34 @@ const ReportMonthScreen = (props) => {
             }}
          >
             <Chart
-               title={t("ReportMonthScreen.chartTitle")}
+               title={t('ReportMonthScreen.chartTitle')}
                line={getLine(newData)}
             />
-            <Chart title={t("categories.food")} line={getLine(foodData)} />
-            <Chart title={t("categories.bills")} line={getLine(billsData)} />
-            <Chart title={t("categories.housing")} line={getLine(houseData)} />
+            <Chart title={t('categories.food')} line={getLine(foodData)} />
+            <Chart title={t('categories.bills')} line={getLine(billsData)} />
+            <Chart title={t('categories.housing')} line={getLine(houseData)} />
             <Chart
-               title={t("categories.clothing")}
+               title={t('categories.clothing')}
                line={getLine(clothingData)}
             />
-            <Chart title={t("categories.health")} line={getLine(healthData)} />
+            <Chart title={t('categories.health')} line={getLine(healthData)} />
             <Chart
-               title={t("categories.leisure")}
+               title={t('categories.leisure')}
                line={getLine(leisureData)}
             />
             <Chart
-               title={t("categories.transport")}
+               title={t('categories.transport')}
                line={getLine(transportData)}
             />
-            <Chart title={t("categories.travel")} line={getLine(travelData)} />
-            <Chart title={t("categories.other")} line={getLine(otherData)} />
+            <Chart title={t('categories.travel')} line={getLine(travelData)} />
+            <Chart title={t('categories.other')} line={getLine(otherData)} />
+            <Chart title={t('categories.kids')} line={getLine(kidsData)} />
          </ScrollView>
       </View>
    );
 };
 
-const Button = ({ text, onPress }) => {
+const Button = ({text, onPress}) => {
    return (
       <TouchableOpacity onPress={onPress}>
          <Text style={styles.button}>{text}</Text>
@@ -256,9 +262,9 @@ const Button = ({ text, onPress }) => {
 
 const styles = StyleSheet.create({
    header: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       paddingHorizontal: 40,
       backgroundColor: Colors.gray,
       height: 40,
