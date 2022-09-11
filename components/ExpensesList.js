@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {useState, useEffect, useCallback} from 'react';
 import {
    View,
    StyleSheet,
@@ -6,27 +6,29 @@ import {
    Button,
    FlatList,
    TouchableOpacity,
-} from "react-native";
-import moment from "moment";
-import { useTranslation } from "react-i18next";
+} from 'react-native';
+import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 
-import Colors from "../constants/colors";
-import { formatValue } from "../utils/index";
+import Colors from '../constants/colors';
+import {formatValue} from '../utils/index';
 
-import { useDispatch } from "react-redux";
-import { setExpenses } from "../store/actions/expenses";
+import {useDispatch} from 'react-redux';
+import {setExpenses} from '../store/actions/expenses';
+import {setCategories} from '../store/actions/categories';
+import {setCards} from '../store/actions/cards';
 
-import EmptyState from "../components/EmpyState";
+import EmptyState from '../components/EmpyState';
 
 const OFFSET_VALUE = 5;
 
 const ExpensesList = (props) => {
-   const { expenses, locale } = props;
+   const {expenses, locale} = props;
 
    const [offset, setOffset] = useState(OFFSET_VALUE);
    const [isRefreshing, setIsRefreshing] = useState(false);
    const dispatch = useDispatch();
-   const { t } = useTranslation();
+   const {t} = useTranslation();
 
    const expensesToRender = expenses.slice(0, offset);
 
@@ -34,6 +36,8 @@ const ExpensesList = (props) => {
       setIsRefreshing(true);
       try {
          await dispatch(setExpenses());
+         await dispatch(setCategories());
+         await dispatch(setCards());
       } catch (err) {
          console.log(err);
          //   setError(err.message);
@@ -48,10 +52,10 @@ const ExpensesList = (props) => {
       <View style={styles.table}>
          <View style={styles.tableHeader}>
             <Text style={styles.tableColumnText}>
-               {t("ExpenseListScreen.expenseColTitle")}
+               {t('ExpenseListScreen.expenseColTitle')}
             </Text>
             <Text style={styles.tableColumnText}>
-               {t("ExpenseListScreen.amountColTitle")}
+               {t('ExpenseListScreen.amountColTitle')}
             </Text>
          </View>
          {expenses.length === 0 ? (
@@ -66,7 +70,7 @@ const ExpensesList = (props) => {
                }}
                data={expensesToRender}
                keyExtractor={(item) => item.id}
-               renderItem={({ item: expense }) => (
+               renderItem={({item: expense}) => (
                   <TouchableOpacity
                      activeOpacity={0.6}
                      onPress={() => {
@@ -84,12 +88,12 @@ const ExpensesList = (props) => {
                            <Text style={styles.date}>
                               {moment(expense.createdAt)
                                  // .locale(locale)
-                                 .format("MMMM Do , YYYY")}
+                                 .format('MMMM Do , YYYY')}
                            </Text>
                         </View>
                         <View style={styles.tableBodyItemRight}>
                            <Text style={styles.amount}>
-                              {formatValue("currency", expense.amount / 100)}
+                              {formatValue('currency', expense.amount / 100)}
                            </Text>
                            <Text style={styles.paymentMethod}>
                               {t(`payment_methods.${expense.payment_method}`)}
@@ -103,7 +107,7 @@ const ExpensesList = (props) => {
                      <View style={styles.button}>
                         <Button
                            color={Colors.blue}
-                           title={t("ExpenseListScreen.loadMore")}
+                           title={t('ExpenseListScreen.loadMore')}
                            onPress={() => {
                               setOffset(offset + OFFSET_VALUE);
                            }}
@@ -120,22 +124,22 @@ const ExpensesList = (props) => {
 const styles = StyleSheet.create({
    table: {
       // flex: 1,
-      width: "95%",
+      width: '95%',
    },
    tableHeader: {
       borderWidth: 1,
       borderColor: Colors.grayBorder,
-      flexDirection: "row",
+      flexDirection: 'row',
       backgroundColor: Colors.gray,
-      justifyContent: "space-between",
+      justifyContent: 'space-between',
       padding: 10,
       height: 50,
    },
    tableColumnText: {
       color: Colors.primary,
-      fontWeight: "bold",
+      fontWeight: 'bold',
       fontSize: 18,
-      fontFamily: "roboto",
+      fontFamily: 'roboto',
    },
    tableBody: {
       borderWidth: 1,
@@ -145,35 +149,35 @@ const styles = StyleSheet.create({
    },
    tableBodyItem: {
       padding: 10,
-      flexDirection: "row",
-      justifyContent: "space-between",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       borderBottomWidth: 1,
       borderBottomColor: Colors.grayBorder,
    },
    description: {
-      textAlign: "left",
-      fontFamily: "roboto-bold",
+      textAlign: 'left',
+      fontFamily: 'roboto-bold',
       fontSize: 16,
    },
    category: {
-      textAlign: "left",
-      fontFamily: "roboto",
+      textAlign: 'left',
+      fontFamily: 'roboto',
       fontSize: 14,
    },
    date: {
-      textAlign: "left",
-      fontFamily: "roboto-blackitalic",
+      textAlign: 'left',
+      fontFamily: 'roboto-blackitalic',
       color: Colors.grayBorder,
       fontSize: 14,
    },
    amount: {
       fontSize: 16,
-      textAlign: "right",
-      fontFamily: "roboto-bold",
+      textAlign: 'right',
+      fontFamily: 'roboto-bold',
    },
    paymentMethod: {
-      textAlign: "right",
-      fontFamily: "roboto",
+      textAlign: 'right',
+      fontFamily: 'roboto',
       fontSize: 14,
    },
 });

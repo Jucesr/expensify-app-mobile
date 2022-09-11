@@ -1,3 +1,11 @@
+### V1.2.0
+
+Sep 11, 2022
+
+-  [NEW]
+   -  Add subcategory option
+   -  Add card option
+
 ### V1.1.0
 
 Oct 06, 2020

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, {useState, useEffect, useMemo} from 'react';
 import {
    View,
    StyleSheet,
@@ -6,23 +6,25 @@ import {
    Text,
    TouchableOpacity,
    Dimensions,
-} from "react-native";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { Feather as Icon } from "@expo/vector-icons";
-import { useHeaderHeight } from "@react-navigation/stack";
-import moment from "moment";
+} from 'react-native';
+import {HeaderButtons, Item} from 'react-navigation-header-buttons';
+import {Feather as Icon} from '@expo/vector-icons';
+import {useHeaderHeight} from '@react-navigation/stack';
+import moment from 'moment';
 
-import { setExpenses } from "../store/actions/expenses";
-import { useSelector, useDispatch } from "react-redux";
+import {setExpenses} from '../store/actions/expenses';
+import {setCategories} from '../store/actions/categories';
+import {setCards} from '../store/actions/cards';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { useTranslation, Trans } from "react-i18next";
+import {useTranslation, Trans} from 'react-i18next';
 
-import HeaderButton from "../components/HeaderButton";
-import ExpenseList from "../components/ExpensesList";
-import Colors from "../constants/colors";
-import navigation from "../constants/navigation";
+import HeaderButton from '../components/HeaderButton';
+import ExpenseList from '../components/ExpensesList';
+import Colors from '../constants/colors';
+import navigation from '../constants/navigation';
 
-import { formatValue } from "../utils/index";
+import {formatValue} from '../utils/index';
 
 const HEIGTH = {
    searchBar: {
@@ -36,17 +38,19 @@ const HEIGTH = {
 
 const ExpenseListScreen = (props) => {
    const headerHeight = useHeaderHeight();
-   const [textFilter, setTextFilter] = useState("");
-   const { t } = useTranslation();
+   const [textFilter, setTextFilter] = useState('');
+   const {t} = useTranslation();
    const dispatch = useDispatch();
 
    useEffect(() => {
       dispatch(setExpenses());
+      dispatch(setCategories());
+      dispatch(setCards());
    }, []);
 
    useEffect(() => {
       props.navigation.setOptions({
-         headerTitle: t("ExpenseListScreen.title"),
+         headerTitle: t('ExpenseListScreen.title'),
       });
    }, [t]);
 
@@ -78,13 +82,13 @@ const ExpenseListScreen = (props) => {
          return isValid;
       });
 
-      const sortProp = filters.sortBy === "date" ? "createdAt" : "amount";
+      const sortProp = filters.sortBy === 'date' ? 'createdAt' : 'amount';
       return expenses.sort((a, b) => (a[sortProp] < b[sortProp] ? 1 : -1));
    });
 
    if (textFilter.length > 0) {
       expenses = expenses.filter((exp) =>
-         exp.description.toLowerCase().includes(textFilter.toLowerCase())
+         exp.description.toLowerCase().includes(textFilter.toLowerCase()),
       );
    }
 
@@ -99,7 +103,7 @@ const ExpenseListScreen = (props) => {
    // Calculate List Height
 
    const tableListHeight =
-      Dimensions.get("window").height -
+      Dimensions.get('window').height -
       headerHeight -
       HEIGTH.searchBar.box -
       HEIGTH.searchBar.margin * 2 -
@@ -118,7 +122,7 @@ const ExpenseListScreen = (props) => {
                />
                <TextInput
                   style={styles.input}
-                  placeholder={t("ExpenseListScreen.searchInputPlaceholder")}
+                  placeholder={t('ExpenseListScreen.searchInputPlaceholder')}
                   onChangeText={changeTextFilterHandler}
                   value={textFilter}
                   underlineColorAndroid="transparent"
@@ -127,7 +131,7 @@ const ExpenseListScreen = (props) => {
             <TouchableOpacity
                activeOpacity={0.6}
                onPress={() => {
-                  props.navigation.navigate("ExpenseFilter");
+                  props.navigation.navigate('ExpenseFilter');
                }}
             >
                <Icon
@@ -146,8 +150,8 @@ const ExpenseListScreen = (props) => {
                      values={{
                         expenseCount: expenses.length,
                         expenseTotal: formatValue(
-                           "currency",
-                           expenseTotal / 100
+                           'currency',
+                           expenseTotal / 100,
                         ),
                      }}
                      components={[<Text style={styles.bold} />]}
@@ -158,9 +162,9 @@ const ExpenseListScreen = (props) => {
          <ExpenseList
             height={tableListHeight}
             expenses={expenses}
-            locale={"es"}
+            locale={'es'}
             onItemPress={(expense) => {
-               props.navigation.navigate("ExpenseForm", {
+               props.navigation.navigate('ExpenseForm', {
                   expense: expense,
                });
             }}
@@ -172,38 +176,38 @@ const ExpenseListScreen = (props) => {
 const styles = StyleSheet.create({
    screen: {
       flex: 1,
-      backgroundColor: "white",
-      alignItems: "center",
+      backgroundColor: 'white',
+      alignItems: 'center',
    },
    messageContainer: {
       height: HEIGTH.messageContainer.box,
-      width: "95%",
+      width: '95%',
    },
    message: {
       fontSize: 16,
-      textAlign: "left",
+      textAlign: 'left',
    },
    bold: {
-      fontWeight: "bold",
+      fontWeight: 'bold',
    },
    inputContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       marginVertical: HEIGTH.searchBar.margin,
       height: HEIGTH.searchBar.box,
-      width: "95%",
+      width: '95%',
    },
    searchSection: {
       // flex: 1,
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
       backgroundColor: Colors.gray,
-      borderColor: "#D2D2D2",
+      borderColor: '#D2D2D2',
       borderWidth: 1,
       borderRadius: 10,
-      width: "85%",
+      width: '85%',
    },
    searchIcon: {
       paddingHorizontal: 10,
@@ -216,7 +220,7 @@ const styles = StyleSheet.create({
       paddingBottom: 5,
       paddingLeft: 0,
       // backgroundColor: "#fff",
-      color: "#424242",
+      color: '#424242',
    },
    filterIcon: {
       // borderWidth: 1,
@@ -228,14 +232,14 @@ const styles = StyleSheet.create({
 
 export const screenOptions = (navData) => {
    return {
-      headerTitle: "ExpenseListScreen",
+      headerTitle: 'ExpenseListScreen',
       headerRight: () => (
          <HeaderButtons HeaderButtonComponent={HeaderButton}>
             <Item
                title="Menu"
                iconName="md-add"
                onPress={() => {
-                  navData.navigation.navigate("ExpenseForm");
+                  navData.navigation.navigate('ExpenseForm');
                }}
             />
          </HeaderButtons>

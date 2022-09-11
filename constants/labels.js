@@ -20,8 +20,10 @@ export default {
             confirmTitle: '¿Estás seguro?',
             confirmMessage: 'Se borrará el gasto',
             labels: {
+               card: 'Tarjeta',
                payment_method: 'Método de pago',
                category: 'Categoria',
+               sub_category: 'Sub-Categoria',
                name: 'Nombre',
                amount: 'Costo',
                date: 'Fecha',
@@ -158,8 +160,10 @@ export default {
             confirmTitle: 'Are you sure?',
             confirmMessage: 'It will delete it forever',
             labels: {
+               card: 'Card',
                payment_method: 'Payment Method',
                category: 'Category',
+               sub_category: 'Sub-Category',
                name: 'Name',
                amount: 'Amount',
                date: 'Date',

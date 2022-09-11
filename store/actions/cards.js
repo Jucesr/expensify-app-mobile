@@ -1,69 +1,56 @@
 import database from '../../firebase/firebase';
 
-export const addExpense = (expenseData = {}) => {
+export const addCard = (itemData = {}) => {
    return (dispatch, getState) => {
       const uid = getState().auth.uid;
-      const {
-         payment_method = '',
-         category = '',
-         sub_category = '',
-         description = '',
-         note = '',
-         amount = 0,
-         createdAt = 0,
-         card_id = null,
-      } = expenseData;
+      const {name = '', number = '', pay_date = '', amount = 0} = itemData;
 
-      const expense = {
-         payment_method,
-         category,
-         sub_category,
-         description,
-         note,
+      const item = {
+         name,
+         number,
+         pay_date,
          amount,
-         createdAt,
-         card_id,
       };
 
       return database
-         .ref(`users/${uid}/expenses`)
-         .push(expense)
+         .ref(`users/${uid}/cards`)
+         .push(item)
          .then((ref) => {
             dispatch({
-               type: 'ADD_EXPENSE',
-               expense: {
+               type: 'ADD_CARD',
+               card: {
                   id: ref.key,
-                  ...expense,
+                  ...item,
                },
             });
          });
    };
 };
 
-export const removeExpense = (id) => {
+export const removeCard = (id) => {
    return (dispatch, getState) => {
       const uid = getState().auth.uid;
       return database
-         .ref(`users/${uid}/expenses/${id}`)
+         .ref(`users/${uid}/cards/${id}`)
          .remove()
          .then(() => {
             dispatch({
-               type: 'REMOVE_EXPENSE',
+               type: 'REMOVE_CARD',
                id,
             });
          });
    };
 };
 
-export const editExpense = (id, updates) => {
+export const editCard = (id, updates) => {
    return (dispatch, getState) => {
       const uid = getState().auth.uid;
       return database
-         .ref(`users/${uid}/expenses/${id}`)
+         .ref(`users/${uid}/cards/${id}`)
          .update(updates)
          .then(() => {
             dispatch({
-               type: 'EDIT_EXPENSE',
+               type: 'EDIT_CARD',
                id,
                updates,
             });
@@ -71,25 +58,25 @@ export const editExpense = (id, updates) => {
    };
 };
 
-export const setExpenses = () => {
+export const setCards = () => {
    return (dispatch, getState) => {
       const uid = getState().auth.uid;
       return database
-         .ref(`users/${uid}/expenses`)
+         .ref(`users/${uid}/cards`)
          .once('value')
          .then((snapshot) => {
             //Parsing
-            const expenses = [];
+            const cards = [];
             snapshot.forEach((childSnapshot) => {
-               expenses.push({
+               cards.push({
                   id: childSnapshot.key,
                   ...childSnapshot.val(),
                });
             });
 
             dispatch({
-               type: 'SET_EXPENSES',
-               expenses: expenses,
+               type: 'SET_CARDS',
+               cards: cards,
             });
          });
    };

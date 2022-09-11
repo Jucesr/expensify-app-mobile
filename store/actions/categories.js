@@ -1,69 +1,63 @@
 import database from '../../firebase/firebase';
 
-export const addExpense = (expenseData = {}) => {
+export const addCategory = (itemData = {}) => {
    return (dispatch, getState) => {
       const uid = getState().auth.uid;
       const {
-         payment_method = '',
-         category = '',
-         sub_category = '',
-         description = '',
-         note = '',
-         amount = 0,
+         parent_id = '',
+         code = '',
+         englishDescription = '',
+         spanishDescription = '',
          createdAt = 0,
-         card_id = null,
-      } = expenseData;
+      } = itemData;
 
-      const expense = {
-         payment_method,
-         category,
-         sub_category,
-         description,
-         note,
-         amount,
+      const item = {
+         parent_id,
+         code,
+         spanishDescription,
+         englishDescription,
          createdAt,
-         card_id,
       };
 
       return database
-         .ref(`users/${uid}/expenses`)
-         .push(expense)
+         .ref(`users/${uid}/categories`)
+         .push(item)
          .then((ref) => {
             dispatch({
-               type: 'ADD_EXPENSE',
-               expense: {
+               type: 'ADD_CATEGORY',
+               category: {
                   id: ref.key,
-                  ...expense,
+                  ...item,
                },
             });
          });
    };
 };
 
-export const removeExpense = (id) => {
+export const removeCategory = (id) => {
    return (dispatch, getState) => {
       const uid = getState().auth.uid;
       return database
-         .ref(`users/${uid}/expenses/${id}`)
+         .ref(`users/${uid}/categories/${id}`)
          .remove()
          .then(() => {
             dispatch({
-               type: 'REMOVE_EXPENSE',
+               type: 'REMOVE_CATEGORY',
                id,
             });
          });
    };
 };
 
-export const editExpense = (id, updates) => {
+export const editCategory = (id, updates) => {
    return (dispatch, getState) => {
       const uid = getState().auth.uid;
       return database
-         .ref(`users/${uid}/expenses/${id}`)
+         .ref(`users/${uid}/categories/${id}`)
          .update(updates)
          .then(() => {
             dispatch({
-               type: 'EDIT_EXPENSE',
+               type: 'EDIT_CATEGORY',
                id,
                updates,
             });
@@ -71,25 +65,25 @@ export const editExpense = (id, updates) => {
    };
 };
 
-export const setExpenses = () => {
+export const setCategories = () => {
    return (dispatch, getState) => {
       const uid = getState().auth.uid;
       return database
-         .ref(`users/${uid}/expenses`)
+         .ref(`users/${uid}/categories`)
          .once('value')
          .then((snapshot) => {
             //Parsing
-            const expenses = [];
+            const categories = [];
             snapshot.forEach((childSnapshot) => {
-               expenses.push({
+               categories.push({
                   id: childSnapshot.key,
                   ...childSnapshot.val(),
                });
             });
 
             dispatch({
-               type: 'SET_EXPENSES',
-               expenses: expenses,
+               type: 'SET_CATEGORIES',
+               categories: categories,
             });
          });
    };
